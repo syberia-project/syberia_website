@@ -1,0 +1,19 @@
+/* TEAM */
+
+Designer, Web-developer: Lane Shukhov
+Telegram: @rlshukhov (https://t.me/rlshukhov)
+
+ROM developer: DennySPb
+Telegram: @DennySPb (https://t.me/DennySPb)
+
+ROM developer: blinoff82
+Telegram: @blinoff82 (https://t.me/blinoff82)
+
+ROM developer: alexxxdev
+Telegram: @alexxxdev (https://t.me/alexxxdev)
+
+
+/* TECHNOLOGY COLOPHON */
+
+CSS3, HTML5
+jQuery, Modernizr, Normalize.css, HTML5-BOILERPLATE
