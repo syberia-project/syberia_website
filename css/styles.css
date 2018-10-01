@@ -25,12 +25,11 @@
  */
 
 .product-device {
-    display: none !important;
     position: absolute;
-    right: 10%;
+    right: 5%;
     bottom: -30%;
-    width: 300px;
-    height: 540px;
+    width: 200px;
+    height: 410px;
     background-color: #333;
     border-radius: 21px;
     -webkit-transform: rotate(30deg);
@@ -50,7 +49,6 @@
 }
 
 .product-device-2 {
-    display: none !important;
     top: -25%;
     right: auto;
     bottom: 0;
@@ -86,12 +84,22 @@
         flex: 1;
     }
 }
-@media (min-width: 1050px) {
+@media (min-width: 992px) {
     .product-device {
         display: block !important;
+        width: 300px;
+        height: 540px;
     }
     .product-device-2 {
         display: block !important;
+        width: 300px;
+        height: 540px;
+    }
+}
+
+@media (min-width: 1060px) {
+    .product-device {
+        right: 10%;
     }
 }
 
