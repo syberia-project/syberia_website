@@ -96,3 +96,27 @@
 }
 
 .overflow-hidden { overflow: hidden; }
+
+:target {
+    background-color: rgba(120,228,215, 0);
+    animation-duration: 2s;
+    animation-name: target-highlight;
+}
+
+@keyframes target-highlight {
+    0% {
+        background-color: rgba(120,228,215, 0);
+    }
+    25% {
+        background-color: rgba(120,228,215, 255);
+    }
+    50% {
+        background-color: rgba(120,228,215, 0);
+    }
+    75% {
+        background-color: rgba(120,228,215, 255);
+    }
+    100% {
+        background-color: rgba(120,228,215, 0);
+    }
+}
