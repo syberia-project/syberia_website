@@ -152,7 +152,7 @@ class Utils {
             $this->_tryToGetAndFormatArrayItem($deviceJson, 'addons'),       $this->_tryToGetAndFormatArrayItem($deviceJson, 'device_brand'),
             $this->_tryToGetAndFormatArrayItem($deviceJson, 'device_model'), basename($filename, '.json')
         );
-        return $this->_fixNoBreakSpace($device);
+        return $device;
     }
 
     /**
