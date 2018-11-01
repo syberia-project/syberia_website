@@ -29,6 +29,9 @@ $errorAction     = function (Base $f3) {
 };
 $downloadsAction = function (Base $f3) {
     $officialDevices = utils($f3)->getOfficialDevicesByBrand();
+    uasort ($officialDevices, function($a, $b) {
+        return count($b) - count($a);
+    });
     $isDownloadPortalEnabled = count($officialDevices) > 0;
     $f3->set('isDownloadPortalEnabled', $isDownloadPortalEnabled);
     !$isDownloadPortalEnabled ?: $f3->set('officialDevices', $officialDevices);
