@@ -6,8 +6,6 @@
  */
 include_once 'config.php';
 
-define('SITE_URL', 'https://syberiaos.com/');
-
 /** @var Base $f3 */
 $f3->set('DEBUG',    0);
 $f3->set('site_url', SITE_URL);
