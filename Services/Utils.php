@@ -93,12 +93,23 @@ class Utils {
      * @return Entity\DeviceConfig[]
      */
     public function getOfficialDevicesList() {
-        $officialDevicesConfigs = $this->_getFolderFilesList(self::OFFICIAL_DEVICE_REPO_PATH);
+        $officialAOnlyDevicesConfigs = $this->_getFolderFilesList(self::OFFICIAL_DEVICE_REPO_PATH.'a-only/');
+        $officialABDevicesConfigs    = $this->_getFolderFilesList(self::OFFICIAL_DEVICE_REPO_PATH.'ab/');
+        $aonlyConfigs = $this->_processDeviceConfigFiles($officialAOnlyDevicesConfigs, false);
+        $abConfigs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true);
+        return array_merge($aonlyConfigs, $abConfigs);
+    }
 
+    /**
+     * @param string[] $filenames
+     * @param bool $isAb
+     * @return Entity\DeviceConfig[]
+     */
+    private function _processDeviceConfigFiles($filenames, $isAb) {
         $result = [];
-        foreach ($officialDevicesConfigs as $deviceConfigFilename) {
+        foreach ($filenames as $deviceConfigFilename) {
             try {
-                $deviceConfig = $this->_loadDeviceConfigFromFile($deviceConfigFilename);
+                $deviceConfig = $this->_loadDeviceConfigFromFile($deviceConfigFilename, $isAb);
             } catch (\Throwable $t) {
                 $this->logThrowable($t);
                 continue;
@@ -135,22 +146,55 @@ class Utils {
 
     /**
      * @param string $filename
+     * @param bool $isAb
      * @return Entity\DeviceConfig
      * @throws \Exception
      */
-    private function _loadDeviceConfigFromFile($filename) {
-        $configFileContent = file_get_contents(self::OFFICIAL_DEVICE_REPO_PATH . $filename);
+    private function _loadDeviceConfigFromFile($filename, $isAb = false) {
+        $folder = $isAb ? self::OFFICIAL_DEVICE_REPO_PATH.'ab/' : self::OFFICIAL_DEVICE_REPO_PATH.'a-only/';
+        $configFileContent = file_get_contents("{$folder}{$filename}");
         $deviceJson = json_decode($configFileContent, true);
+        $deviceJson = $isAb ? $deviceJson['response'][0] : $deviceJson;
         $deviceJson['config_file_name'] = $filename;
+        return $isAb ? $this->_loadABDeviceConfigFromData($deviceJson) : $this->_loadAOnlyDeviceConfigFromData($deviceJson);
+    }
+
+    /**
+     * @param mixed $data
+     * @return Entity\DeviceConfig
+     * @throws \Exception
+     */
+    private function _loadAOnlyDeviceConfigFromData($data) {
         $device = new Entity\DeviceConfig(
-            $this->_tryToGetAndFormatArrayItem($deviceJson, 'developer'),    $this->_tryToGetAndFormatArrayItem($deviceJson, 'developer_url'),
-            $this->_tryToGetAndFormatArrayItem($deviceJson, 'website_url'),  $this->_tryToGetAndFormatArrayItem($deviceJson, 'news_url'),
-            $this->_tryToGetAndFormatArrayItem($deviceJson, 'forum_url'),    $this->_tryToGetAndFormatArrayItem($deviceJson, 'donate_url'),
-            $this->_tryToGetAndFormatArrayItem($deviceJson, 'filename'),     $this->_tryToGetAndFormatArrayItem($deviceJson, 'filesize'),
-            $this->_tryToGetAndFormatArrayItem($deviceJson, 'md5'),          $this->_tryToGetAndFormatArrayItem($deviceJson, 'build_date'),
-            $this->_tryToGetAndFormatArrayItem($deviceJson, 'url'),          $this->_tryToGetAndFormatArrayItem($deviceJson, 'changelog'),
-            $this->_tryToGetAndFormatArrayItem($deviceJson, 'addons'),       $this->_tryToGetAndFormatArrayItem($deviceJson, 'device_brand'),
-            $this->_tryToGetAndFormatArrayItem($deviceJson, 'device_model'), basename($filename, '.json')
+            $this->_tryToGetAndFormatArrayItem($data, 'developer'),    $this->_tryToGetAndFormatArrayItem($data, 'developer_url'),
+            $this->_tryToGetAndFormatArrayItem($data, 'website_url'),  $this->_tryToGetAndFormatArrayItem($data, 'news_url'),
+            $this->_tryToGetAndFormatArrayItem($data, 'forum_url'),    $this->_tryToGetAndFormatArrayItem($data, 'donate_url'),
+            $this->_tryToGetAndFormatArrayItem($data, 'filename'),     $this->_tryToGetAndFormatArrayItem($data, 'filesize'),
+            $this->_tryToGetAndFormatArrayItem($data, 'md5'),          $this->_tryToGetAndFormatArrayItem($data, 'build_date'),
+            $this->_tryToGetAndFormatArrayItem($data, 'url'),          $this->_tryToGetAndFormatArrayItem($data, 'changelog'),
+            $this->_tryToGetAndFormatArrayItem($data, 'addons'),       $this->_tryToGetAndFormatArrayItem($data, 'device_brand'),
+            $this->_tryToGetAndFormatArrayItem($data, 'device_model'), basename($data['config_file_name'], '.json'),
+            false
+        );
+        return $device;
+    }
+
+    /**
+     * @param mixed $data
+     * @return Entity\DeviceConfig
+     * @throws \Exception
+     */
+    private function _loadABDeviceConfigFromData($data) {
+        $device = new Entity\DeviceConfig(
+            $this->_tryToGetAndFormatArrayItem($data, 'developer'), $this->_tryToGetAndFormatArrayItem($data, 'developer_url'),
+            null, null,
+            null, null,
+            null, null,
+            null, null,
+            $this->_tryToGetAndFormatArrayItem($data, 'url'), null,
+            null, $this->_tryToGetAndFormatArrayItem($data, 'device_brand'),
+            $this->_tryToGetAndFormatArrayItem($data, 'device_model'), basename($data['config_file_name'], '.json'),
+            true
         );
         return $device;
     }
