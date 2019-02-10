@@ -188,8 +188,17 @@ class Utils {
      * @return string[]
      */
     private function _getFolderFilesList($folderPath) {
-        return array_filter(scandir($folderPath), function($filename) use ($folderPath) {
-            return is_file($folderPath . $filename);
-        });
+        try {
+            if (!is_dir($folderPath)) {
+                return [];
+            }
+            return array_filter(scandir($folderPath), function ($filename) use ($folderPath) {
+                return is_file($folderPath . $filename);
+            });
+        } catch (\Throwable $t) {
+            return [];
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }
