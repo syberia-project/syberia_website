@@ -1,3 +1,4 @@
-fatfree/*
 config.php
 .idea/*
+.htaccess
+fatfree
