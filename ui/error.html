@@ -54,7 +54,9 @@
 </head>
 <body>
     <h1>{{@ERROR.code}} {{@ERROR.status}}</h1>
-    <p>{{@ERROR.text}}</p>
+    {* <p>{{@ERROR.text}}</p> *}
+    <br>
+    <p><a href="{{@SITE_URL}}">Go back</a></p>
 </body>
 </html>
 <!-- IE needs 512+ bytes: https://blogs.msdn.microsoft.com/ieinternals/2010/08/18/friendly-http-error-pages/ -->
