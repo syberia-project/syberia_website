@@ -186,14 +186,14 @@ class Utils {
      */
     private function _loadABDeviceConfigFromData($data) {
         $device = new Entity\DeviceConfig(
-            $this->_tryToGetAndFormatArrayItem($data, 'developer'), $this->_tryToGetAndFormatArrayItem($data, 'developer_url'),
+            $this->_tryToGetAndFormatArrayItem($data, 'developer'), null,
             null, null,
             null, null,
             null, null,
             null, null,
             $this->_tryToGetAndFormatArrayItem($data, 'url'), null,
             null, $this->_tryToGetAndFormatArrayItem($data, 'device_brand'),
-            $this->_tryToGetAndFormatArrayItem($data, 'device_model'), basename($data['config_file_name'], '.json'),
+            $this->_tryToGetAndFormatArrayItem($data, 'device_model'), $data['device_codename'],
             true
         );
         return $device;
