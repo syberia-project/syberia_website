@@ -14,6 +14,8 @@ use Template;
 
 class Utils {
     const OFFICIAL_DEVICE_REPO_PATH = './OTA/';
+    const A_ONLY_FOLDER             = self::OFFICIAL_DEVICE_REPO_PATH.'a-only/';
+    const AB_FOLDER                 = self::OFFICIAL_DEVICE_REPO_PATH.'ab/';
 
     private $_f3;
     private $_template;
@@ -75,6 +77,22 @@ class Utils {
     }
 
     /**
+     * @param string $filename
+     * @return string
+     */
+    public function getOtaFileString($filename) {
+        $device = str_replace('.json', '', $filename);
+        $device = str_replace('.', '', $device);
+        $filename = "{$device}.json";
+        if (file_exists(self::AB_FOLDER.$filename)) {
+            return file_get_contents(self::AB_FOLDER.$filename);
+        } elseif (file_exists(self::A_ONLY_FOLDER.$filename)) {
+            return file_get_contents(self::A_ONLY_FOLDER.$filename);
+        }
+        return '{"Error": "No OTAs for requested device"}';
+    }
+
+    /**
      * @return array [string $brand => Entity\DeviceConfig[] $devices]
      */
     public function getOfficialDevicesByBrand() {
@@ -93,8 +111,8 @@ class Utils {
      * @return Entity\DeviceConfig[]
      */
     public function getOfficialDevicesList() {
-        $officialAOnlyDevicesConfigs = $this->_getFolderFilesList(self::OFFICIAL_DEVICE_REPO_PATH.'a-only/');
-        $officialABDevicesConfigs    = $this->_getFolderFilesList(self::OFFICIAL_DEVICE_REPO_PATH.'ab/');
+        $officialAOnlyDevicesConfigs = $this->_getFolderFilesList(self::A_ONLY_FOLDER);
+        $officialABDevicesConfigs    = $this->_getFolderFilesList(self::AB_FOLDER);
         $aonlyConfigs = $this->_processDeviceConfigFiles($officialAOnlyDevicesConfigs, false);
         $abConfigs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true);
         return array_merge($aonlyConfigs, $abConfigs);
@@ -151,7 +169,7 @@ class Utils {
      * @throws \Exception
      */
     private function _loadDeviceConfigFromFile($filename, $isAb = false) {
-        $folder = $isAb ? self::OFFICIAL_DEVICE_REPO_PATH.'ab/' : self::OFFICIAL_DEVICE_REPO_PATH.'a-only/';
+        $folder = $isAb ? self::AB_FOLDER : self::A_ONLY_FOLDER;
         $configFileContent = file_get_contents("{$folder}{$filename}");
         $deviceJson = json_decode($configFileContent, true);
         $deviceJson = $isAb ? $deviceJson['response'][0] : $deviceJson;
