@@ -189,7 +189,6 @@ class Utils {
 
     private function _loadAutobuildChangelog($configFilePath) {
         $changelogFilePath = str_replace('.json', '.changelog', $configFilePath);
-        $this->_log->write("Changelog file: {$changelogFilePath}");
         if (!file_exists($changelogFilePath)) {
             return null;
         }
