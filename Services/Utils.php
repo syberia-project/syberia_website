@@ -111,8 +111,8 @@ class Utils {
      * @return Entity\DeviceConfig[]
      */
     public function getOfficialDevicesList() {
-        $officialAOnlyDevicesConfigs = $this->_getFolderFilesList(self::A_ONLY_FOLDER);
-        $officialABDevicesConfigs    = $this->_getFolderFilesList(self::AB_FOLDER);
+        $officialAOnlyDevicesConfigs = $this->_getFolderFilesList(self::A_ONLY_FOLDER, '.json');
+        $officialABDevicesConfigs    = $this->_getFolderFilesList(self::AB_FOLDER, '.json');
         $aonlyConfigs = $this->_processDeviceConfigFiles($officialAOnlyDevicesConfigs, false);
         $abConfigs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true);
         return array_merge($aonlyConfigs, $abConfigs);
@@ -266,15 +266,20 @@ class Utils {
 
     /**
      * @param string $folderPath
+     * @param string $extensionFilter like '.json'
      * @return string[]
      */
-    private function _getFolderFilesList($folderPath) {
+    private function _getFolderFilesList($folderPath, $extensionFilter = null) {
         try {
             if (!is_dir($folderPath)) {
                 return [];
             }
-            return array_filter(scandir($folderPath), function ($filename) use ($folderPath) {
-                return is_file($folderPath . $filename);
+            return array_filter(scandir($folderPath), function ($filename) use ($folderPath, $extensionFilter) {
+                if ($extensionFilter === null) {
+                    return is_file($folderPath . $filename);
+                } else {
+                    return is_file($folderPath . $filename) && substr($filename, -mb_strlen($extensionFilter)) === $extensionFilter;
+                }
             });
         } catch (\Throwable $t) {
             return [];
