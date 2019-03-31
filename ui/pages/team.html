@@ -5,7 +5,9 @@
         <div class="row mb-4">
 
             <div class="card my-2" style="width: 210px; margin-left: auto; margin-right: auto;">
-                <img alt="DennySPb avatar" class="card-img-top rounded-circle shadowed" style="margin-top: 1.25rem; width: 75px; height: 75px; margin-left: auto; margin-right: auto;" src="/img/avatars/DennySPb.jpg"/>
+                <img alt="DennySPb avatar" class="card-img-top rounded-circle shadowed"
+                     style="margin-top: 1.25rem; width: 75px; height: 75px; margin-left: auto; margin-right: auto;"
+                     src="/img/avatars/DennySPb.jpg"/>
                 <div class="card-body">
                     <h5 class="card-title">DennySPb</h5>
                     <p class="card-text">Lead ROM Developer</p>
@@ -14,7 +16,9 @@
             </div>
 
             <div class="card my-2" style="width: 210px; margin-left: auto; margin-right: auto;">
-                <img alt="blinoff82 avatar" class="card-img-top rounded-circle shadowed" style="margin-top: 1.25rem; width: 75px; height: 75px; margin-left: auto; margin-right: auto;" src="/img/avatars/blinoff82.jpg"/>
+                <img alt="blinoff82 avatar" class="card-img-top rounded-circle shadowed"
+                     style="margin-top: 1.25rem; width: 75px; height: 75px; margin-left: auto; margin-right: auto;"
+                     src="/img/avatars/blinoff82.jpg"/>
                 <div class="card-body">
                     <h5 class="card-title">blinoff82</h5>
                     <p class="card-text">ROM Developer</p>
@@ -23,7 +27,9 @@
             </div>
 
             <div class="card my-2" style="width: 210px; margin-left: auto; margin-right: auto;">
-                <img alt="alexxxdev avatar" class="card-img-top rounded-circle shadowed" style="margin-top: 1.25rem; width: 75px; height: 75px; margin-left: auto; margin-right: auto;" src="/img/avatars/alexxxdev.jpg"/>
+                <img alt="alexxxdev avatar" class="card-img-top rounded-circle shadowed"
+                     style="margin-top: 1.25rem; width: 75px; height: 75px; margin-left: auto; margin-right: auto;"
+                     src="/img/avatars/alexxxdev.jpg"/>
                 <div class="card-body">
                     <h5 class="card-title">alexxxdev</h5>
                     <p class="card-text">ROM Developer</p>
@@ -33,9 +39,28 @@
 
         </div>
 
+        <script>
+            function easterEggs() {
+                let placeHolder = document.getElementById("easterEggPlaceHolder");
+                placeHolder.style.display = 'none';
+
+                let video = document.getElementById("easterEgg");
+                video.style.display = 'block';
+                video.removeAttribute( 'controls' );
+                video.play();
+                video.removeAttribute( 'controls' );
+            }
+        </script>
+
         <div class="row mb-4">
             <div class="card my-2" style="width: 210px; margin-left: auto; margin-right: auto;">
-                <img alt="Lane Shukhov avatar" class="card-img-top rounded-circle shadowed" style="margin-top: 1.25rem; width: 75px; height: 75px; margin-left: auto; margin-right: auto;" src="/img/avatars/rlshukhov.jpg"/>
+                <img onclick="easterEggs()" id="easterEggPlaceHolder" alt="Lane Shukhov avatar" class="card-img-top rounded-circle shadowed"
+                       style="margin-top: 1.25rem; width: 75px; height: 75px; margin-left: auto; margin-right: auto;"
+                       src="/img/avatars/rlshukhov.jpg"/>
+                <video id="easterEgg" class="card-img-top rounded-circle shadowed"
+                       style="display: none; margin-top: 1.25rem; width: 75px; height: 75px; margin-left: auto; margin-right: auto;">
+                    <source src="./video/ricardo.mp4" type="video/mp4" />
+                </video>
                 <div class="card-body">
                     <h5 class="card-title">Lane Shukhov</h5>
                     <p class="card-text">Designer,<br>Site developer</p>
