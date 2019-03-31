@@ -193,7 +193,7 @@ class Utils {
             return null;
         }
         $content = file_get_contents($changelogFilePath);
-        return mb_strlen($content) > 0 ? $content : null;
+        return mb_strlen($content) > 0 ? str_replace("\x1B", '', $content) : null;
     }
 
     /**

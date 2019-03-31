@@ -11,7 +11,7 @@
                     <check if="{{ true }}">
 
                         <true>
-                            <div id="accordion" style="margin-bottom: 30px;">
+                            <div id="{{@brand}}Accordion" style="margin-bottom: 30px;">
                                 <repeat group="{{ @devices }}" value="{{ @device }}">
                                     <div class="card">
                                         <div class="card-header" id="{{@device->getDeviceCodename()}}Heading">
@@ -27,7 +27,7 @@
 
                                         <div id="{{@device->getDeviceCodename()}}Collapse" class="collapse"
                                              aria-labelledby="{{@device->getDeviceCodename()}}Heading"
-                                             data-parent="#accordion">
+                                             data-parent="#{{@brand}}Accordion">
                                             <div class="card-body text-left">
                                                 <p class="text-muted" style="margin-bottom: 8px;">Brand: <b>{{
                                                     @device->getDeviceBrand() }}</b></p>
