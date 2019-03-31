@@ -82,6 +82,11 @@ class DeviceConfig {
     public $is_ab;
 
     /**
+     * @var string
+     */
+    public $version;
+
+    /**
      * DeviceConfig constructor.
      * @param string $developer
      * @param string $developer_url
@@ -100,6 +105,7 @@ class DeviceConfig {
      * @param string $device_model
      * @param string $device_codename
      * @param bool $is_ab
+     * @param string $version
      */
     public function __construct(
         $developer,
@@ -118,7 +124,8 @@ class DeviceConfig {
         $device_brand,
         $device_model,
         $device_codename,
-        $is_ab
+        $is_ab,
+        $version
     ) {
         $this->developer = $developer;
         $this->developer_url = $developer_url;
@@ -137,6 +144,7 @@ class DeviceConfig {
         $this->device_model = $device_model;
         $this->device_codename = $device_codename;
         $this->is_ab = $is_ab;
+        $this->version = $version;
     }
 
     /**
@@ -256,5 +264,9 @@ class DeviceConfig {
      */
     public function isAb() {
         return $this->is_ab;
+    }
+
+    public function getVersion() {
+        return $this->version;
     }
 }

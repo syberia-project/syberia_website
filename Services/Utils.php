@@ -150,7 +150,12 @@ class Utils {
         if ($array[$key] === null) {
             throw new \Exception("No {$key} field in {$array['config_file_name']}");
         }
-        return gettype($array[$key]) === 'string' ? trim($array[$key]) : $array[$key];
+        $result = gettype($array[$key]) === 'string' ? trim($array[$key]) : $array[$key];
+        if (gettype($result) === 'string') {
+            return mb_strlen($result) > 0 ? $result: null;
+        } else {
+            return $result;
+        }
     }
 
     /**
@@ -174,7 +179,22 @@ class Utils {
         $deviceJson = json_decode($configFileContent, true);
         $deviceJson = $isAb ? $deviceJson['response'][0] : $deviceJson;
         $deviceJson['config_file_name'] = $filename;
-        return $isAb ? $this->_loadABDeviceConfigFromData($deviceJson) : $this->_loadAOnlyDeviceConfigFromData($deviceJson);
+        $deviceConfig = $isAb ? $this->_loadABDeviceConfigFromData($deviceJson) : $this->_loadAOnlyDeviceConfigFromData($deviceJson);
+        $autoBuildChangelog = $this->_loadAutobuildChangelog("{$folder}{$filename}");
+        if ($autoBuildChangelog !== null) {
+            $deviceConfig->changelog = $autoBuildChangelog;
+        }
+        return $deviceConfig;
+    }
+
+    private function _loadAutobuildChangelog($configFilePath) {
+        $changelogFilePath = str_replace('.json', '.changelog', $configFilePath);
+        $this->_log->write("Changelog file: {$changelogFilePath}");
+        if (!file_exists($changelogFilePath)) {
+            return null;
+        }
+        $content = file_get_contents($changelogFilePath);
+        return mb_strlen($content) > 0 ? $content : null;
     }
 
     /**
@@ -188,11 +208,11 @@ class Utils {
             $this->_tryToGetAndFormatArrayItem($data, 'website_url'),  $this->_tryToGetAndFormatArrayItem($data, 'news_url'),
             $this->_tryToGetAndFormatArrayItem($data, 'forum_url'),    $this->_tryToGetAndFormatArrayItem($data, 'donate_url'),
             $this->_tryToGetAndFormatArrayItem($data, 'filename'),     $this->_tryToGetAndFormatArrayItem($data, 'filesize'),
-            $this->_tryToGetAndFormatArrayItem($data, 'md5'),          $this->_tryToGetAndFormatArrayItem($data, 'build_date'),
+            $this->_tryToGetAndFormatArrayItem($data, 'md5'),          @\DateTime::createFromFormat('Ymd', $this->_tryToGetAndFormatArrayItem($data, 'build_date'))->format('Y-m-d'),
             $this->_tryToGetAndFormatArrayItem($data, 'url'),          $this->_tryToGetAndFormatArrayItem($data, 'changelog'),
             $this->_tryToGetAndFormatArrayItem($data, 'addons'),       $this->_tryToGetAndFormatArrayItem($data, 'device_brand'),
             $this->_tryToGetAndFormatArrayItem($data, 'device_model'), basename($data['config_file_name'], '.json'),
-            false
+            false, null
         );
         return $device;
     }
@@ -207,12 +227,12 @@ class Utils {
             $this->_tryToGetAndFormatArrayItem($data, 'developer'), null,
             null, null,
             null, null,
-            null, null,
-            null, null,
+            null, $this->_tryToGetAndFormatArrayItem($data, 'size'),
+            null, @date('Y-m-d', $this->_tryToGetAndFormatArrayItem($data, 'datetime')),
             $this->_tryToGetAndFormatArrayItem($data, 'url'), null,
             null, $this->_tryToGetAndFormatArrayItem($data, 'device_brand'),
             $this->_tryToGetAndFormatArrayItem($data, 'device_model'), $data['device_codename'],
-            true
+            true, $this->_tryToGetAndFormatArrayItem($data, 'version')
         );
         return $device;
     }
