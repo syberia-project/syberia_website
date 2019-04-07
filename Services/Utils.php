@@ -180,17 +180,27 @@ class Utils {
         $deviceJson = $isAb ? $deviceJson['response'][0] : $deviceJson;
         $deviceJson['config_file_name'] = $filename;
         $deviceConfig = $isAb ? $this->_loadABDeviceConfigFromData($deviceJson) : $this->_loadAOnlyDeviceConfigFromData($deviceJson);
-        $autoBuildChangelog = $this->_loadAutobuildChangelog("{$folder}{$filename}");
+        $autoBuildChangelog = $this->_loadAutobuildChangelog($filename, $folder);
         if ($autoBuildChangelog !== null) {
             $deviceConfig->changelog = $autoBuildChangelog;
         }
         return $deviceConfig;
     }
 
-    private function _loadAutobuildChangelog($configFilePath) {
-        $changelogFilePath = str_replace('.json', '.changelog', $configFilePath);
+    /**
+     * @param string $deviceConfigFilename
+     * @param string $folder
+     * @return mixed
+     */
+    private function _loadAutobuildChangelog($deviceConfigFilename, $folder) {
+        $changelogFileName = str_replace('.json', '.changelog', $deviceConfigFilename);
+        $changelogFilePath = "{$folder}{$changelogFileName}";
         if (!file_exists($changelogFilePath)) {
-            return null;
+            $changelogFileName = strtolower($changelogFileName);
+            $changelogFilePath = "{$folder}{$changelogFileName}";
+            if (!file_exists($changelogFilePath)) {
+                return null;
+            }
         }
         $content = file_get_contents($changelogFilePath);
         return mb_strlen($content) > 0 ? str_replace("\x1B", '', $content) : null;
