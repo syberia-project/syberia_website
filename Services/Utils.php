@@ -102,6 +102,12 @@ class Utils {
         $result = [];
         foreach ($brands as $brand) {
             $devicesByBrand = $this->_filterOfficialDevicesByBrand($officialDevices, $brand);
+            uasort ($devicesByBrand, function($a, $b) {
+                /** @var Entity\DeviceConfig $a */
+                /** @var Entity\DeviceConfig $b */
+                return $a->isActual() !== $b->isActual();
+            });
+            $devicesByBrand = array_reverse($devicesByBrand);
             $result[$brand] = $devicesByBrand;
         }
         return $result;

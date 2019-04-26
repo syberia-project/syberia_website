@@ -42,6 +42,27 @@
                                                     <true> ({{ @device->getVersion() }})</true>
                                                 </check>
                                             </b></p>
+                                        <p class="text-muted" style="margin-bottom: 8px;">Relevance:
+                                            <check if="{{ @device->isActual() }}">
+                                                <true><span class="badge badge-success" style="font-size: 90%;">actual</span></true>
+                                                <false><span class="badge badge-warning" style="font-size: 90%;">outdated</span></false>
+                                            </check>
+
+                                            <check if="{{ @device->getLastBuildDelta() === -1 }}">
+                                                <true>(back to the future)</true>
+                                                <false>
+                                                    <check if="{{ @device->getLastBuildDelta() === 0 }}">
+                                                        <true>(last build was uploaded today)</true>
+                                                        <false>
+                                                            <check if="{{ @device->getLastBuildDelta() === 1 }}">
+                                                                <true>(last build was uploaded yesterday)</true>
+                                                                <false>(last build was uploaded {{ @device->getLastBuildDelta() }} days ago)</false>
+                                                            </check>
+                                                        </false>
+                                                    </check>
+                                                </false>
+                                            </check>
+                                        </p>
 
                                         <div class="text-center">
                                             <a onclick="handleOutboundLinkClicks('{{ @device->getUrl() }}', 'Download', '{{ @device->getDeviceModel() }} ({{ @device->getDeviceCodename() }})')"

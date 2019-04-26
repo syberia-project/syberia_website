@@ -266,7 +266,35 @@ class DeviceConfig {
         return $this->is_ab;
     }
 
+    /**
+     * @return string
+     */
     public function getVersion() {
         return $this->version;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActual() {
+        $buildDate = date_create($this->getBuildDate());
+        if ($buildDate === false) {
+            return false;
+        }
+        return date_diff($buildDate, date_create('now'))->days <= 14;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastBuildDelta() {
+        $buildDate = date_create($this->getBuildDate());
+        if ($buildDate === false) {
+            return false;
+        }
+        if ($buildDate > date_create('now')) {
+            return -1;
+        }
+        return (int)date_diff($buildDate, date_create('now'))->days;
     }
 }
