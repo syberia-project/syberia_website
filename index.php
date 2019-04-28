@@ -10,6 +10,15 @@ include_once 'config.php';
 $f3->set('DEBUG',    0);
 $f3->set('site_url', SITE_URL);
 $f3->set('utils',    new Services\Utils($f3));
+$f3->set('FALLBACK','en');  // English as default fallback language
+
+if ($f3->exists('COOKIE.userLang')) {
+    $supportedLanguages = ['en', 'ru'];
+    $userLang = $f3->get('COOKIE.userLang');
+    if (in_array($userLang, $supportedLanguages)) {
+        $f3->set('LANGUAGE', $userLang);
+    }
+}
 
 /**
  * @param Base $f3
@@ -18,6 +27,8 @@ $f3->set('utils',    new Services\Utils($f3));
 function utils(Base $f3) {
     return $f3->utils;
 }
+
+$f3->set('currentLanguage', utils($f3)->getCurrentLanguage());
 
 $indexAction     = function (Base $f3) {
     utils($f3)->renderPage('Syberia OS', 'pages/index.html');

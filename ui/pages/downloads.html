@@ -26,37 +26,37 @@
                                      aria-labelledby="{{@device->getDeviceCodename()}}Heading"
                                      data-parent="#{{@brand}}Accordion">
                                     <div class="card-body text-left">
-                                        <p class="text-muted" style="margin-bottom: 8px;">Brand: <b>{{
+                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.brand }}: <b>{{
                                             @device->getDeviceBrand() }}</b></p>
-                                        <p class="text-muted" style="margin-bottom: 8px;">Model: <b>{{
+                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.model }}: <b>{{
                                             @device->getDeviceModel() }}</b></p>
-                                        <p class="text-muted" style="margin-bottom: 8px;">Codename: <b>{{
+                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.codename }}: <b>{{
                                             @device->getDeviceCodename() }}</b></p>
-                                        <p class="text-muted" style="margin-bottom: 8px;">Maintainer: <b>{{
+                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.maintainer }}: <b>{{
                                             @device->getDeveloper() }}</b></p>
-                                        <p class="text-muted" style="margin-bottom: 8px;">ROM size: <b>{{
+                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.romSize }}: <b>{{
                                             round(@device->getFilesize() / 1024 / 1024, 1) }} MB</b></p>
-                                        <p class="text-muted" style="margin-bottom: 8px;">Build date (version):
+                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.buildDate }}:
                                             <b>{{ @device->getBuildDate() }}
                                                 <check if="{{ @device->getVersion() !== null }}">
                                                     <true> ({{ @device->getVersion() }})</true>
                                                 </check>
                                             </b></p>
-                                        <p class="text-muted" style="margin-bottom: 8px;">Relevance:
+                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.relevance }}:
                                             <check if="{{ @device->isActual() }}">
-                                                <true><span class="badge badge-success" style="font-size: 90%;">actual</span></true>
-                                                <false><span class="badge badge-warning" style="font-size: 90%;">outdated</span></false>
+                                                <true><span class="badge badge-success" style="font-size: 90%;">{{ @T.actual }}</span></true>
+                                                <false><span class="badge badge-warning" style="font-size: 90%;">{{ @T.outdated }}</span></false>
                                             </check>
 
                                             <check if="{{ @device->getLastBuildDelta() === -1 }}">
                                                 <true>(back to the future)</true>
                                                 <false>
                                                     <check if="{{ @device->getLastBuildDelta() === 0 }}">
-                                                        <true>(last build was uploaded today)</true>
+                                                        <true>({{ @T.lastBuildWasUploaded, @T.today | format }})</true>
                                                         <false>
                                                             <check if="{{ @device->getLastBuildDelta() === 1 }}">
-                                                                <true>(last build was uploaded yesterday)</true>
-                                                                <false>(last build was uploaded {{ @device->getLastBuildDelta() }} days ago)</false>
+                                                                <true>({{ @T.lastBuildWasUploaded, @T.yesterday | format }})</true>
+                                                                <false>({{ @T.lastBuildWasUploaded, @utils->getTranslatedLastBuildDateText(@device->getLastBuildDelta()) | format }})</false>
                                                             </check>
                                                         </false>
                                                     </check>
@@ -68,7 +68,7 @@
                                             <a onclick="handleOutboundLinkClicks('{{ @device->getUrl() }}', 'Download', '{{ @device->getDeviceModel() }} ({{ @device->getDeviceCodename() }})')"
                                                style="margin-top: auto;" href="{{ @device->getUrl() }}"
                                                target="_blank"
-                                               class="btn btn-primary">Download</a>
+                                               class="btn btn-primary">{{ @T.download }}</a>
 
                                             <check if="{{ @device->getChangelog() !== null }}">
                                                 <true>
@@ -76,7 +76,7 @@
                                                        data-toggle="modal"
                                                        data-target="#{{@device->getDeviceCodename()}}Changelog"
                                                        href="#">
-                                                        Changelog
+                                                        {{ @T.changelogButton }}
                                                     </a>
                                                 </true>
                                             </check>
@@ -93,7 +93,7 @@
                                                     <div class="modal-header">
                                                         <h5 class="modal-title"
                                                             id="{{@device->getDeviceCodename()}}ModalTitle">{{
-                                                            @device->getDeviceModel() }} Changelog</h5>
+                                                            @T.changelogTitle, @device->getDeviceModel() | format }}</h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                                 aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
@@ -104,7 +104,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
-                                                                data-dismiss="modal">Close
+                                                                data-dismiss="modal">{{ @T.close }}
                                                         </button>
                                                     </div>
                                                 </div>
@@ -126,12 +126,10 @@
             <div class="product-device box-shadow d-none d-md-block"></div>
             <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
             <div class="col-md-5 p-lg-5 mx-auto my-5">
-                <h1 class="display-4 font-weight-normal">Temporary unavailable</h1>
-                <p class="lead font-weight-normal"><br>Technical work in progress, please check back later.</p>
-                <p class="lead font-weight-normal">Also, you can use our <a target="_blank"
-                                                                            href="https://sourceforge.net/projects/syberiaos/files/">SourceForge</a>
-                    <br>for download ROM now.<br><br></p>
-                <a class="btn btn-outline-secondary" href="/">Home</a>
+                <h1 class="display-4 font-weight-normal">{{ @T.temporaryUnavailableError }}</h1>
+                <p class="lead font-weight-normal"><br>{{ @T.temporaryUnavailableDescription }}</p>
+                <p class="lead font-weight-normal">{{ @T.temporaryUnavailableHelp | raw }}<br><br></p>
+                <a class="btn btn-outline-secondary" href="/">{{ @T.home }}</a>
             </div>
         </div>
     </false>

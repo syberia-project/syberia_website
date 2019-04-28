@@ -23,8 +23,8 @@
 
     <link rel="stylesheet" href="/css/styles.css">
 
-    <meta name="google-site-verification" content="KH58rPk6dAxm5zI5-YZ4FcwmXVuFPIAd7Jdk32UEIKQ" />
-    <meta name="yandex-verification" content="f662a9d03b981609" />
+    <meta name="google-site-verification" content="KH58rPk6dAxm5zI5-YZ4FcwmXVuFPIAd7Jdk32UEIKQ"/>
+    <meta name="yandex-verification" content="f662a9d03b981609"/>
 </head>
 
 <body>
@@ -42,10 +42,10 @@
                       d="M239.000,478.000 C107.004,478.000 -0.000,370.996 -0.000,239.000 C-0.000,107.004 107.004,-0.000 239.000,-0.000 C370.996,-0.000 478.000,107.004 478.000,239.000 C478.000,370.996 370.996,478.000 239.000,478.000 ZM271.013,274.705 C274.072,271.648 274.908,269.811 278.000,267.000 C283.541,261.963 288.052,262.056 293.000,267.000 C305.683,279.673 335.592,310.495 340.040,314.940 C345.587,320.482 356.599,308.245 351.669,303.318 C347.620,299.272 307.549,259.232 293.350,245.044 C291.578,243.274 279.963,243.321 277.601,245.680 C271.892,251.385 262.735,259.735 259.384,263.083 C254.248,268.215 265.260,280.453 271.013,274.705 ZM262.441,145.000 C262.441,145.000 178.577,233.441 156.000,256.000 C150.782,261.214 146.970,261.281 141.770,256.085 C138.107,252.425 132.894,247.930 128.917,243.955 C126.151,241.192 117.255,241.217 114.592,243.878 C96.916,261.540 51.079,307.342 45.292,313.124 C38.102,320.309 54.522,337.472 62.000,330.000 C67.867,324.138 99.356,293.632 115.000,278.000 C119.167,273.836 124.910,273.913 129.000,278.000 C133.179,282.176 138.413,287.416 142.000,291.000 C144.449,293.447 153.627,293.371 156.000,291.000 C178.434,268.583 262.000,181.000 262.000,181.000 C262.000,181.000 399.372,315.378 408.000,324.000 C416.628,332.622 433.573,315.998 424.944,307.377 C416.316,298.755 262.441,145.000 262.441,145.000 Z"></path>
             </svg>
         </a>
-        <a class="py-2 d-none d-md-inline-block" href="/">Home</a>
-        <a class="py-2 d-none d-md-inline-block" href="/downloads">Downloads</a>
-        <a class="py-2 d-none d-md-inline-block" href="/team">Team</a>
-        <a class="py-2 d-none d-md-inline-block" href="/links">Links</a>
+        <a class="py-2 d-none d-md-inline-block" href="/">{{ @T.home }}</a>
+        <a class="py-2 d-none d-md-inline-block" href="/downloads">{{ @T.downloads }}</a>
+        <a class="py-2 d-none d-md-inline-block" href="/team">{{ @T.team }}</a>
+        <a class="py-2 d-none d-md-inline-block" href="/links">{{ @T.links }}</a>
     </div>
 </nav>
 
@@ -61,29 +61,58 @@
                       d="M239.000,478.000 C107.004,478.000 -0.000,370.996 -0.000,239.000 C-0.000,107.004 107.004,-0.000 239.000,-0.000 C370.996,-0.000 478.000,107.004 478.000,239.000 C478.000,370.996 370.996,478.000 239.000,478.000 ZM271.013,274.705 C274.072,271.648 274.908,269.811 278.000,267.000 C283.541,261.963 288.052,262.056 293.000,267.000 C305.683,279.673 335.592,310.495 340.040,314.940 C345.587,320.482 356.599,308.245 351.669,303.318 C347.620,299.272 307.549,259.232 293.350,245.044 C291.578,243.274 279.963,243.321 277.601,245.680 C271.892,251.385 262.735,259.735 259.384,263.083 C254.248,268.215 265.260,280.453 271.013,274.705 ZM262.441,145.000 C262.441,145.000 178.577,233.441 156.000,256.000 C150.782,261.214 146.970,261.281 141.770,256.085 C138.107,252.425 132.894,247.930 128.917,243.955 C126.151,241.192 117.255,241.217 114.592,243.878 C96.916,261.540 51.079,307.342 45.292,313.124 C38.102,320.309 54.522,337.472 62.000,330.000 C67.867,324.138 99.356,293.632 115.000,278.000 C119.167,273.836 124.910,273.913 129.000,278.000 C133.179,282.176 138.413,287.416 142.000,291.000 C144.449,293.447 153.627,293.371 156.000,291.000 C178.434,268.583 262.000,181.000 262.000,181.000 C262.000,181.000 399.372,315.378 408.000,324.000 C416.628,332.622 433.573,315.998 424.944,307.377 C416.316,298.755 262.441,145.000 262.441,145.000 Z"></path>
             </svg>
             <small style="margin-bottom: .5rem!important;" class="d-block mb-3 text-muted">&copy; 2018 - 2019</small>
-            <a href="mailto:info@syberiaos.com" target="_blank"><small class="d-block mb-3 text-muted">info@syberiaos.com</small></a>
+
+            <script>
+                function setLangCookie(value) {
+                    let name = "userLang";
+                    let days = 9999;
+                    var expires = "";
+                    if (days) {
+                        var date = new Date();
+                        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                        expires = "; expires=" + date.toUTCString();
+                    }
+                    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+                    location.reload();
+                }
+            </script>
+
+            <div class="container" style="width: max-content; margin-left: 0px;">
+                <div class="row"><a href="mailto:info@syberiaos.com" target="_blank">
+                    <small class="d-block mb-2 text-muted">info@syberiaos.com</small>
+                </a></div>
+                <div class="row">
+                    <p class="mb-2" style="width: 100%; text-align: center;">
+                        <button type="button" onclick="setLangCookie('en')" class="btn btn-sm{{ @currentLanguage==='en' ? ' active' : '' }}"><code>ENG</code></button>
+                        |
+                        <button type="button" onclick="setLangCookie('ru')" class="btn btn-sm{{ @currentLanguage==='ru' ? ' active' : '' }}"><code>RUS</code></button>
+                    </p>
+                </div>
+            </div>
+
         </div>
         <div class="col-6 col-md">
-            <h5>Navigation</h5>
+            <h5>{{ @T.navigation }}</h5>
             <ul class="list-unstyled text-small">
-                <li><a class="text-muted" href="/">Home</a></li>
-                <li><a class="text-muted" href="/downloads">Downloads</a></li>
-                <li><a class="text-muted" href="/team">Team</a></li>
-                <li><a class="text-muted" href="/links">Links</a></li>
-                <li><a class="text-muted" href="/links#Donate">Donate</a></li>
+                <li><a class="text-muted" href="/">{{ @T.home }}</a></li>
+                <li><a class="text-muted" href="/downloads">{{ @T.downloads }}</a></li>
+                <li><a class="text-muted" href="/team">{{ @T.team }}</a></li>
+                <li><a class="text-muted" href="/links">{{ @T.links }}</a></li>
+                <li><a class="text-muted" href="/links#Donate">{{ @T.donateShort }}</a></li>
             </ul>
         </div>
         <div class="col-6 col-md">
-            <h5>Downloads</h5>
+            <h5>{{ @T.downloads }}</h5>
             <ul class="list-unstyled text-small">
-                <li><a class="text-muted" href="/downloads">Device list</a></li>
+                <li><a class="text-muted" href="/downloads">{{ @T.deviceList }}</a></li>
             </ul>
         </div>
         <div class="col-6 col-md">
-            <h5>Donate</h5>
+            <h5>{{ @T.donateShort }}</h5>
             <ul class="list-unstyled text-small">
                 <li><a class="text-muted" href="https://www.paypal.me/blinoff82" target="_blank">Paypal</a></li>
-                <li><a class="text-muted" href="https://money.yandex.ru/to/410011044636058" target="_blank">Yandex.Money</a></li>
+                <li><a class="text-muted" href="https://money.yandex.ru/to/410011044636058"
+                       target="_blank">Yandex.Money</a></li>
                 <li><a class="text-muted" href="/links#WMR">WebMoney</a></li>
             </ul>
         </div>

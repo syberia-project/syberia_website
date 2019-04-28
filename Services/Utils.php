@@ -303,4 +303,48 @@ class Utils {
             return [];
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getCurrentLanguage() {
+        $language = $this->_f3->get('T.languageName');
+        switch ($language) {
+            case 'Русский':
+                return 'ru';
+                break;
+            case 'English':
+                return 'en';
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
+
+    /**
+     * @param int $dayCount
+     * @return string
+     */
+    public function getTranslatedLastBuildDateText($dayCount) {
+        $language = $this->getCurrentLanguage();
+        switch ($language) {
+            case 'ru':
+                return "{$dayCount} {$this->_pluralRus($dayCount, ['день', 'дня', 'дней'])} назад";
+                break;
+            default:
+                return "{$dayCount} {$this->_f3->get('T.daysAgo')}";
+                break;
+        }
+    }
+
+    /**
+     * @param int $number
+     * @param string[] $after
+     * @return string
+     */
+    private function _pluralRus($number, $after) {
+        $cases = array (2, 0, 1, 1, 1, 2);
+        return $after[ ($number%100>4 && $number%100<20)? 2: $cases[min($number%10, 5)] ];
+    }
 }
