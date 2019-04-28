@@ -30,8 +30,8 @@ function utils(Base $f3) {
 
 $f3->set('currentLanguage', utils($f3)->getCurrentLanguage());
 
-utils($f3)->log('Cookie: ' . json_encode($f3->get('COOKIE')));
-utils($f3)->log('currentLanguage: ' . json_encode($f3->get('currentLanguage')));
+utils($f3)->log($f3->get('PATH') . ' Cookie: ' . json_encode($f3->get('COOKIE')));
+utils($f3)->log($f3->get('PATH') . ' currentLanguage: ' . json_encode($f3->get('currentLanguage')));
 
 $indexAction     = function (Base $f3) {
     utils($f3)->renderPage('Syberia OS', 'pages/index.html');
