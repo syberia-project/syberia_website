@@ -156,8 +156,14 @@
             eventLabel: url,
             transport: 'beacon'
         });
-        if (category == 'Download') {
+        if (category === 'Download') {
             ym(53867467, 'reachGoal', 'download');
+        } else if (category === 'Danate') {
+            if (action === 'PayPal') {
+                ym(53867467, 'reachGoal', 'paypal');
+            } else if (action === 'YandexMoney') {
+                ym(53867467, 'reachGoal', 'yandexMoney');
+            }
         }
     }
 </script>
