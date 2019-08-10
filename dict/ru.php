@@ -37,7 +37,7 @@ return [
     'updates' => 'Обновления',
     'updatesDescription' => 'Оставайтесь с нами',
     'openSource' => 'Open source',
-    'openSourceDescription' => 'Наш <a class="github-link" target="_blank" href="https://github.com/syberia-project">github</a> <br> <a class="github-link" target="_blank" href="http://gerrit.syberiaos.com">gerrit</a>',
+    'openSourceDescription' => 'Наш <a class="github-link" target="_blank" href="https://github.com/syberia-project">github</a> <br> Наш <a class="github-link" target="_blank" href="http://gerrit.syberiaos.com">gerrit</a>',
 
     // Download page
     'temporaryUnavailableError' => 'Временно недоступно',

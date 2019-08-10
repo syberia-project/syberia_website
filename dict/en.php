@@ -37,7 +37,7 @@ return [
     'updates' => 'OTA updates',
     'updatesDescription' => 'Stay tuned',
     'openSource' => 'Open source',
-    'openSourceDescription' => 'Our <a class="github-link" target="_blank" href="https://github.com/syberia-project">github</a> <br> <a class="github-link" target="_blank" href="http://gerrit.syberiaos.com">gerrit</a>',
+    'openSourceDescription' => 'Our <a class="github-link" target="_blank" href="https://github.com/syberia-project">github</a> <br> Our <a class="github-link" target="_blank" href="http://gerrit.syberiaos.com">gerrit</a>',
 
     // Download page
     'temporaryUnavailableError' => 'Temporary unavailable',
