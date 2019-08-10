@@ -35,9 +35,9 @@ return [
     'customisation' => 'Кастомизация',
     'customisationDescription' => 'Гибкость во всем',
     'updates' => 'Обновления',
-    'updatesDescription' => 'Stay tuned',
+    'updatesDescription' => 'Оставайтесь с нами',
     'openSource' => 'Open source',
-    'openSourceDescription' => 'Наш <a class="github-link" target="_blank" href="https://github.com/syberia-project">github</a>',
+    'openSourceDescription' => 'Наш <a class="github-link" target="_blank" href="https://github.com/syberia-project">github</a> <br> <a class="github-link" target="_blank" href="http://gerrit.syberiaos.com">gerrit</a>',
 
     // Download page
     'temporaryUnavailableError' => 'Временно недоступно',
@@ -51,8 +51,8 @@ return [
     'romSize' => 'Размер прошивки',
     'buildDate' => 'Дата сборки (версия)',
     'relevance' => 'Актуальность',
-    'actual' => 'actual',
-    'outdated' => 'outdated',
+    'actual' => 'актуально',
+    'outdated' => 'устарела',
     'lastBuildWasUploaded' => 'последняя сборка была загружена {0}',
     'changelogButton' => 'Изменения',
     'changelogTitle' => 'История изменений {0}',
