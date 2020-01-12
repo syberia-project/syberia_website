@@ -5,115 +5,144 @@
         <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
             <div class="mx-auto" style="max-width: 700px;">
 
-                <repeat group="{{ @officialDevices }}" key="{{ @brand }}" value="{{ @devices }}">
+                <repeat group="{{ @officialDevices }}" key="{{ @brand }}" value="{{ @devicesByModel }}">
                     <h1 class="display-4 font-weight-normal mb-4">{{ @brand }}</h1>
 
                     <div id="{{@brand}}Accordion" style="margin-bottom: 30px;">
-                        <repeat group="{{ @devices }}" value="{{ @device }}">
+                        <repeat group="{{ @devicesByModel }}" key="{{ @model }}" value="{{ @devices }}">
+
+
                             <div class="card">
-                                <div class="card-header" id="{{@device->getDeviceCodename()}}Heading">
+                                <div class="card-header" id="{{@devices[0]->getDeviceCodename()}}Heading">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link" data-toggle="collapse"
-                                                data-target="#{{@device->getDeviceCodename()}}Collapse"
+                                                data-target="#{{@devices[0]->getDeviceCodename()}}Collapse"
                                                 aria-expanded="true"
-                                                aria-controls="{{@device->getDeviceCodename()}}Collapse">
-                                            {{@device->getDeviceModel()}}
+                                                aria-controls="{{@devices[0]->getDeviceCodename()}}Collapse">
+                                            {{ @model }}
                                         </button>
                                     </h5>
                                 </div>
 
-                                <div id="{{@device->getDeviceCodename()}}Collapse" class="collapse"
-                                     aria-labelledby="{{@device->getDeviceCodename()}}Heading"
+                                <div id="{{@devices[0]->getDeviceCodename()}}Collapse" class="collapse"
+                                     aria-labelledby="{{@devices[0]->getDeviceCodename()}}Heading"
                                      data-parent="#{{@brand}}Accordion">
-                                    <div class="card-body text-left">
-                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.brand }}: <b>{{
-                                            @device->getDeviceBrand() }}</b></p>
-                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.model }}: <b>{{
-                                            @device->getDeviceModel() }}</b></p>
-                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.codename }}: <b>{{
-                                            @device->getDeviceCodename() }}</b></p>
-                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.maintainer }}: <b>{{
-                                            @device->getDeveloper() }}</b></p>
-                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.romSize }}: <b>{{
-                                            round(@device->getFilesize() / 1024 / 1024, 1) }} MB</b></p>
-                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.buildDate }}:
-                                            <b>{{ @device->getBuildDate() }}
-                                                <check if="{{ @device->getVersion() !== null }}">
-                                                    <true> ({{ @device->getVersion() }})</true>
-                                                </check>
-                                            </b></p>
-                                        <p class="text-muted" style="margin-bottom: 8px;">{{ @T.relevance }}:
-                                            <check if="{{ @device->isActual() }}">
-                                                <true><span class="badge badge-success" style="font-size: 90%;">{{ @T.actual }}</span></true>
-                                                <false><span class="badge badge-warning" style="font-size: 90%;">{{ @T.outdated }}</span></false>
-                                            </check>
 
-                                            <check if="{{ @device->getLastBuildDelta() === -1 }}">
-                                                <true>(back to the future)</true>
-                                                <false>
-                                                    <check if="{{ @device->getLastBuildDelta() === 0 }}">
-                                                        <true>({{ @T.lastBuildWasUploaded, @T.today | format }})</true>
-                                                        <false>
-                                                            <check if="{{ @device->getLastBuildDelta() === 1 }}">
-                                                                <true>({{ @T.lastBuildWasUploaded, @T.yesterday | format }})</true>
-                                                                <false>({{ @T.lastBuildWasUploaded, @utils->getTranslatedLastBuildDateText(@device->getLastBuildDelta()) | format }})</false>
-                                                            </check>
-                                                        </false>
+                                    <repeat group="{{ @devices }}" key="{{ @index }}" value="{{ @device }}">
+
+                                        <div <check if="{{ @index !== 0 }}"><true>style="border-bottom: 1px solid rgba(0,0,0,.12);"</true></check> class="card-body text-left">
+                                            <p class="text-muted" style="margin-bottom: 8px;">{{ @T.brand }}: <b>{{
+                                                @device->getDeviceBrand() }}</b></p>
+                                            <p class="text-muted" style="margin-bottom: 8px;">{{ @T.model }}: <b>{{
+                                                @device->getDeviceModel() }}</b></p>
+                                            <p class="text-muted" style="margin-bottom: 8px;">{{ @T.codename }}: <b>{{
+                                                @device->getDeviceCodename() }}</b></p>
+                                            <p class="text-muted" style="margin-bottom: 8px;">{{ @T.maintainer }}: <b>{{
+                                                @device->getDeveloper() }}</b></p>
+                                            <p class="text-muted" style="margin-bottom: 8px;">{{ @T.romSize }}: <b>{{
+                                                round(@device->getFilesize() / 1024 / 1024, 1) }} MB</b></p>
+                                            <p class="text-muted" style="margin-bottom: 8px;">{{ @T.buildDate }}:
+                                                <b>{{ @device->getBuildDate() }}
+                                                    <check if="{{ @device->getVersion() !== null }}">
+                                                        <true> ({{ @device->getVersion() }})</true>
                                                     </check>
-                                                </false>
-                                            </check>
-                                        </p>
+                                                </b></p>
+                                            <p class="text-muted" style="margin-bottom: 8px;">{{ @T.androidVersion }}:
+                                                <b>{{ @device->getAndroidVersion() }}</b>
+                                            </p>
+                                            <p class="text-muted" style="margin-bottom: 8px;">{{ @T.relevance }}:
 
-                                        <div class="text-center">
-                                            <a onclick="handleOutboundLinkClicks('{{ @device->getUrl() }}', 'Download', '{{ @device->getDeviceModel() }} ({{ @device->getDeviceCodename() }})')"
-                                               style="margin-top: auto;" href="{{ @device->getUrl() }}"
-                                               target="_blank"
-                                               class="btn btn-primary">{{ @T.download }}</a>
+                                                <check if="{{ @device->isFinal() }}">
+                                                    <true><span class="badge badge-info"
+                                                                style="font-size: 90%;">{{ @T.final }}</span></true>
 
-                                            <check if="{{ @device->getChangelog() !== null }}">
-                                                <true>
-                                                    <a style="margin-top: auto;" class="btn btn-primary"
-                                                       data-toggle="modal"
-                                                       data-target="#{{@device->getDeviceCodename()}}Changelog"
-                                                       href="#">
-                                                        {{ @T.changelogButton }}
-                                                    </a>
-                                                </true>
-                                            </check>
-                                        </div>
+                                                    <false>
+                                                        <check if="{{ @device->isActual() }}">
+                                                            <true><span class="badge badge-success"
+                                                                        style="font-size: 90%;">{{ @T.actual }}</span>
+                                                            </true>
+                                                            <false><span class="badge badge-warning"
+                                                                         style="font-size: 90%;">{{ @T.outdated }}</span>
+                                                            </false>
+                                                        </check>
+                                                    </false>
+                                                </check>
+
+                                                <check if="{{ @device->getLastBuildDelta() === -1 }}">
+                                                    <true>(back to the future)</true>
+                                                    <false>
+                                                        <check if="{{ @device->getLastBuildDelta() === 0 }}">
+                                                            <true>({{ @T.lastBuildWasUploaded, @T.today | format }})
+                                                            </true>
+                                                            <false>
+                                                                <check if="{{ @device->getLastBuildDelta() === 1 }}">
+                                                                    <true>({{ @T.lastBuildWasUploaded, @T.yesterday | format }})
+                                                                    </true>
+                                                                    <false>({{ @T.lastBuildWasUploaded, @utils->getTranslatedLastBuildDateText(@device->getLastBuildDelta()) | format }})
+                                                                    </false>
+                                                                </check>
+                                                            </false>
+                                                        </check>
+                                                    </false>
+                                                </check>
+                                            </p>
+
+                                            <div class="text-center">
+                                                <a onclick="handleOutboundLinkClicks('{{ @device->getUrl() }}', 'Download', '{{ @device->getDeviceModel() }} ({{ @device->getDeviceCodename() }})')"
+                                                   style="margin-top: auto;" href="{{ @device->getUrl() }}"
+                                                   target="_blank"
+                                                   class="btn btn-primary">{{ @T.download }}</a>
+
+                                                <check if="{{ @device->getChangelog() !== null }}">
+                                                    <true>
+                                                        <a style="margin-top: auto;" class="btn btn-primary"
+                                                           data-toggle="modal"
+                                                           data-target="#{{@device->getDeviceCodename()}}Changelog"
+                                                           href="#">
+                                                            {{ @T.changelogButton }}
+                                                        </a>
+                                                    </true>
+                                                </check>
+                                            </div>
 
 
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="{{@device->getDeviceCodename()}}Changelog"
-                                             tabindex="-1"
-                                             role="dialog" aria-labelledby="{{@device->getDeviceCodename()}}ModalTitle"
-                                             aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title"
-                                                            id="{{@device->getDeviceCodename()}}ModalTitle">{{
-                                                            @T.changelogTitle, @device->getDeviceModel() | format }}</h5>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <pre>{{ @device->getChangelog() }}</pre>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                                data-dismiss="modal">{{ @T.close }}
-                                                        </button>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="{{@device->getDeviceCodename()}}Changelog"
+                                                 tabindex="-1"
+                                                 role="dialog"
+                                                 aria-labelledby="{{@device->getDeviceCodename()}}ModalTitle"
+                                                 aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="{{@device->getDeviceCodename()}}ModalTitle">{{ @T.changelogTitle, @device->getDeviceModel() | format }}</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <pre>{{ @device->getChangelog() }}</pre>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">{{ @T.close }}
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
 
-                                    </div>
+                                    </repeat>
+
+
                                 </div>
                             </div>
+
+
                         </repeat>
                     </div>
                 </repeat>

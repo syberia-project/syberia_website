@@ -17,6 +17,8 @@ class Utils {
     const A_ONLY_FOLDER             = self::OFFICIAL_DEVICE_REPO_PATH.'a-only/';
     const AB_FOLDER                 = self::OFFICIAL_DEVICE_REPO_PATH.'ab/';
 
+    const DEVELOPER_STUB = 'unknown';
+
     private $_f3;
     private $_template;
     private $_log;
@@ -93,47 +95,65 @@ class Utils {
     }
 
     /**
-     * @return array [string $brand => Entity\DeviceConfig[] $devices]
+     * @return array [string $brand => Entity\DeviceConfig[][] $devices]
      */
     public function getOfficialDevicesByBrand() {
-        $officialDevices = $this->getOfficialDevicesList();
-        $brands = $this->_getBrands($officialDevices);
+        $officialDeviceConfigsByModelName = $this->_sortOfficialDeviceConfigsByBuildDelta($this->getOfficialDevicesListByModel());
+        $brands = $this->_getBrands($officialDeviceConfigsByModelName);
 
         $result = [];
         foreach ($brands as $brand) {
-            $devicesByBrand = $this->_filterOfficialDevicesByBrand($officialDevices, $brand);
+            $devicesByBrand = $this->_filterOfficialDevicesByBrand($officialDeviceConfigsByModelName, $brand);
             uasort ($devicesByBrand, function($a, $b) {
-                /** @var Entity\DeviceConfig $a */
-                /** @var Entity\DeviceConfig $b */
-                return $a->isActual() !== $b->isActual();
+                /** @var Entity\DeviceConfig[] $a */
+                /** @var Entity\DeviceConfig[] $b */
+                return $a[0]->getLastBuildDelta() > $b[0]->getLastBuildDelta();
             });
-            $devicesByBrand = array_reverse($devicesByBrand);
             $result[$brand] = $devicesByBrand;
         }
         return $result;
     }
 
+    private function _sortOfficialDeviceConfigsByBuildDelta($officialDeviceConfigsByModelName) {
+        $result = [];
+        foreach ($officialDeviceConfigsByModelName as $modelName => $officialDeviceConfigs) {
+            uasort ($officialDeviceConfigs, function($a, $b) {
+                /** @var Entity\DeviceConfig $a */
+                /** @var Entity\DeviceConfig $b */
+                return $a->getLastBuildDelta() > $b->getLastBuildDelta();
+            });
+            $result[$modelName] = $officialDeviceConfigs;
+        }
+        return $result;
+    }
+
     /**
-     * @return Entity\DeviceConfig[]
+     * @return Entity\DeviceConfig[][]
      */
-    public function getOfficialDevicesList() {
+    public function getOfficialDevicesListByModel() {
         $officialAOnlyDevicesConfigs = $this->_getFolderFilesList(self::A_ONLY_FOLDER, '.json');
         $officialABDevicesConfigs    = $this->_getFolderFilesList(self::AB_FOLDER, '.json');
         $aonlyConfigs = $this->_processDeviceConfigFiles($officialAOnlyDevicesConfigs, false);
         $abConfigs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true);
-        return array_merge($aonlyConfigs, $abConfigs);
+        $android10Configs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true, DeviceConfig::ANDROID_VERSION_10);
+        return array_merge_recursive($aonlyConfigs, $abConfigs, $android10Configs);
     }
 
     /**
      * @param string[] $filenames
      * @param bool $isAb
+     * @param string $androidVersion
      * @return Entity\DeviceConfig[]
      */
-    private function _processDeviceConfigFiles($filenames, $isAb) {
+    private function _processDeviceConfigFiles($filenames, $isAb, $androidVersion = Entity\DeviceConfig::ANDROID_VERSION_9) {
         $result = [];
         foreach ($filenames as $deviceConfigFilename) {
             try {
-                $deviceConfig = $this->_loadDeviceConfigFromFile($deviceConfigFilename, $isAb);
+                if (!$this->_isAndroidVersionMatch($deviceConfigFilename, $androidVersion)) {
+                    continue;
+                }
+
+                $deviceConfig = $this->_loadDeviceConfigFromFile($deviceConfigFilename, $isAb, $androidVersion);
             } catch (\Throwable $t) {
                 $this->logThrowable($t);
                 continue;
@@ -141,9 +161,42 @@ class Utils {
                 $this->logException($e);
                 continue;
             }
-            $result[] = $deviceConfig;
+            $result[$deviceConfig->getDeviceModel()][] = $deviceConfig;
         }
         return $result;
+    }
+
+    /**
+     * @param string $filename
+     * @param string $targetAndroidVersion
+     * @return bool
+     * @throws \Exception
+     */
+    private function _isAndroidVersionMatch($filename, $targetAndroidVersion) {
+        $android10Postfix = '-10.json';
+        switch ($targetAndroidVersion) {
+            case Entity\DeviceConfig::ANDROID_VERSION_9:
+                return !$this->_hasPostfix($filename, $android10Postfix);
+            case Entity\DeviceConfig::ANDROID_VERSION_10:
+                return $this->_hasPostfix($filename, $android10Postfix);
+            default:
+                throw new \Exception("Unknown android version: {$targetAndroidVersion}");
+        }
+    }
+
+    /**
+     * @param string $string
+     * @param string $postfix
+     * @return bool
+     */
+    private function _hasPostfix($string, $postfix) {
+        $stringLength = strlen($string);
+        $postfixLength = strlen($postfix);
+        if ($postfixLength > $stringLength) {
+            return false;
+        }
+
+        return substr($string, $stringLength - $postfixLength, $postfixLength) === $postfix;
     }
 
     /**
@@ -176,16 +229,17 @@ class Utils {
     /**
      * @param string $filename
      * @param bool $isAb
+     * @param string $androidVersion
      * @return Entity\DeviceConfig
      * @throws \Exception
      */
-    private function _loadDeviceConfigFromFile($filename, $isAb = false) {
+    private function _loadDeviceConfigFromFile($filename, $isAb, $androidVersion) {
         $folder = $isAb ? self::AB_FOLDER : self::A_ONLY_FOLDER;
         $configFileContent = file_get_contents("{$folder}{$filename}");
         $deviceJson = json_decode($configFileContent, true);
         $deviceJson = $isAb ? $deviceJson['response'][0] : $deviceJson;
         $deviceJson['config_file_name'] = $filename;
-        $deviceConfig = $isAb ? $this->_loadABDeviceConfigFromData($deviceJson) : $this->_loadAOnlyDeviceConfigFromData($deviceJson);
+        $deviceConfig = $isAb ? $this->_loadABDeviceConfigFromData($deviceJson, $androidVersion) : $this->_loadAOnlyDeviceConfigFromData($deviceJson, $androidVersion);
         $autoBuildChangelog = $this->_loadAutobuildChangelog($filename, $folder);
         if ($autoBuildChangelog !== null) {
             $deviceConfig->changelog = $autoBuildChangelog;
@@ -214,10 +268,11 @@ class Utils {
 
     /**
      * @param mixed $data
+     * @param string $androidVersion
      * @return Entity\DeviceConfig
      * @throws \Exception
      */
-    private function _loadAOnlyDeviceConfigFromData($data) {
+    private function _loadAOnlyDeviceConfigFromData($data, $androidVersion) {
         $device = new Entity\DeviceConfig(
             $this->_tryToGetAndFormatArrayItem($data, 'developer'),    $this->_tryToGetAndFormatArrayItem($data, 'developer_url'),
             $this->_tryToGetAndFormatArrayItem($data, 'website_url'),  $this->_tryToGetAndFormatArrayItem($data, 'news_url'),
@@ -226,57 +281,61 @@ class Utils {
             $this->_tryToGetAndFormatArrayItem($data, 'md5'),          @\DateTime::createFromFormat('Ymd', $this->_tryToGetAndFormatArrayItem($data, 'build_date'))->format('Y-m-d'),
             $this->_tryToGetAndFormatArrayItem($data, 'url'),          $this->_tryToGetAndFormatArrayItem($data, 'changelog'),
             $this->_tryToGetAndFormatArrayItem($data, 'addons'),       $this->_tryToGetAndFormatArrayItem($data, 'device_brand'),
-            $this->_tryToGetAndFormatArrayItem($data, 'device_model'), basename($data['config_file_name'], '.json'),
-            false, null
+            $this->_tryToGetAndFormatArrayItem($data, 'device_model'), trim(basename($data['config_file_name'], '.json')),
+            false, null, $androidVersion
         );
         return $device;
     }
 
     /**
-     * @param mixed $data
+     * @param mixed $androidVersion
+     * @param string $data
      * @return Entity\DeviceConfig
      * @throws \Exception
      */
-    private function _loadABDeviceConfigFromData($data) {
+    private function _loadABDeviceConfigFromData($data, $androidVersion) {
+        $developer = $androidVersion === Entity\DeviceConfig::ANDROID_VERSION_10
+            ? $this->_f3->get('T.'.self::DEVELOPER_STUB)
+            : $this->_tryToGetAndFormatArrayItem($data, 'developer');
+
         $device = new Entity\DeviceConfig(
-            $this->_tryToGetAndFormatArrayItem($data, 'developer'), null,
+            $developer, null,
             null, null,
             null, null,
             null, $this->_tryToGetAndFormatArrayItem($data, 'size'),
             null, @date('Y-m-d', $this->_tryToGetAndFormatArrayItem($data, 'datetime')),
             $this->_tryToGetAndFormatArrayItem($data, 'url'), null,
             null, $this->_tryToGetAndFormatArrayItem($data, 'device_brand'),
-            $this->_tryToGetAndFormatArrayItem($data, 'device_model'), $data['device_codename'],
-            true, $this->_tryToGetAndFormatArrayItem($data, 'version')
+            $this->_tryToGetAndFormatArrayItem($data, 'device_model'), trim($data['device_codename']),
+            true, $this->_tryToGetAndFormatArrayItem($data, 'version'), $androidVersion
         );
         return $device;
     }
 
     /**
-     * @param Entity\DeviceConfig[] $officialDevices
+     * @param Entity\DeviceConfig[][] $officialDeviceConfigsByModelName
      * @return string[]
      */
-    private function _getBrands($officialDevices) {
+    private function _getBrands($officialDeviceConfigsByModelName) {
         $result = [];
-        array_walk($officialDevices, function ($value, $key) use (&$result) {
-            /** @var DeviceConfig $value */
-            if (!in_array($value->getDeviceBrand(), $result)) {
-                $result[] = $value->getDeviceBrand();
-            }
+        array_walk($officialDeviceConfigsByModelName, function ($deviceConfigs) use (&$result) {
+            /** @var DeviceConfig[] $deviceConfigs */
+            $result[] = $deviceConfigs[0]->getDeviceBrand();
         });
+        $result = array_unique($result);
         natsort($result);
         return $result;
     }
 
     /**
-     * @param Entity\DeviceConfig[] $officialDevices
+     * @param Entity\DeviceConfig[][] $officialDevices
      * @param string $brand
-     * @return Entity\DeviceConfig[]
+     * @return Entity\DeviceConfig[][]
      */
     private function _filterOfficialDevicesByBrand($officialDevices, $brand) {
-        return array_filter($officialDevices, function ($officialDevice) use ($brand) {
-            /** @var Entity\DeviceConfig $officialDevice */
-            return $officialDevice->getDeviceBrand() === $brand;
+        return array_filter($officialDevices, function ($officialDeviceConfigs) use ($brand) {
+            /** @var Entity\DeviceConfig[] $officialDeviceConfigs */
+            return $officialDeviceConfigs[0]->getDeviceBrand() === $brand;
         });
     }
 

@@ -50,9 +50,11 @@ return [
     'maintainer' => 'Maintainer',
     'romSize' => 'ROM size',
     'buildDate' => 'Build date (version)',
+    'androidVersion' => 'Android version',
     'relevance' => 'Relevance',
     'actual' => 'actual',
     'outdated' => 'outdated',
+    'final' => 'final',
     'lastBuildWasUploaded' => 'last build was uploaded {0}',
     'changelogButton' => 'Changelog',
     'changelogTitle' => '{0} Changelog',
@@ -61,4 +63,6 @@ return [
     'today' => 'today',
     'yesterday' => 'yesterday',
     'daysAgo' => 'days ago',
+    
+    'unknown' => 'unknown',
 ];

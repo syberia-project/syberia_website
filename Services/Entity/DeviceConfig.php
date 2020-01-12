@@ -8,6 +8,10 @@
 namespace Services\Entity;
 
 class DeviceConfig {
+
+    const ANDROID_VERSION_9  = '9 Pie';
+    const ANDROID_VERSION_10 = '10';
+
     /**
      * @var string
      */
@@ -87,6 +91,11 @@ class DeviceConfig {
     public $version;
 
     /**
+     * @var string
+     */
+    public $androidVersion;
+
+    /**
      * DeviceConfig constructor.
      * @param string $developer
      * @param string $developer_url
@@ -106,6 +115,7 @@ class DeviceConfig {
      * @param string $device_codename
      * @param bool $is_ab
      * @param string $version
+     * @param string $androidVersion
      */
     public function __construct(
         $developer,
@@ -125,7 +135,8 @@ class DeviceConfig {
         $device_model,
         $device_codename,
         $is_ab,
-        $version
+        $version,
+        $androidVersion
     ) {
         $this->developer = $developer;
         $this->developer_url = $developer_url;
@@ -145,6 +156,7 @@ class DeviceConfig {
         $this->device_codename = $device_codename;
         $this->is_ab = $is_ab;
         $this->version = $version;
+        $this->androidVersion = $androidVersion;
     }
 
     /**
@@ -274,6 +286,13 @@ class DeviceConfig {
     }
 
     /**
+     * @return string
+     */
+    public function getAndroidVersion() {
+        return $this->androidVersion;
+    }
+
+    /**
      * @return bool
      */
     public function isActual() {
@@ -296,5 +315,12 @@ class DeviceConfig {
             return -1;
         }
         return (int)date_diff($buildDate, date_create('now'))->days;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFinal() {
+        return $this->getAndroidVersion() === self::ANDROID_VERSION_9;
     }
 }

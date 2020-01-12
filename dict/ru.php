@@ -50,9 +50,11 @@ return [
     'maintainer' => 'Сопровождающий',
     'romSize' => 'Размер прошивки',
     'buildDate' => 'Дата сборки (версия)',
+    'androidVersion' => 'Версия Android',
     'relevance' => 'Актуальность',
     'actual' => 'актуально',
     'outdated' => 'устарела',
+    'final' => 'финальная',
     'lastBuildWasUploaded' => 'последняя сборка была загружена {0}',
     'changelogButton' => 'Изменения',
     'changelogTitle' => 'История изменений {0}',
@@ -61,4 +63,6 @@ return [
     'today' => 'сегодня',
     'yesterday' => 'вчера',
     'daysAgo' => 'дней назад',
+
+    'unknown' => 'неизвестен',
 ];
