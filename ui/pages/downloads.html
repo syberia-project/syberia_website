@@ -37,8 +37,8 @@
                                                 @device->getDeviceModel() }}</b></p>
                                             <p class="text-muted" style="margin-bottom: 8px;">{{ @T.codename }}: <b>{{
                                                 @device->getDeviceCodename() }}</b></p>
-                                            <p class="text-muted" style="margin-bottom: 8px;">{{ @T.maintainer }}: <b>{{
-                                                @device->getDeveloper() }}</b></p>
+                                            <check if="{{ @device->getDeveloper() !== 'unknown' }}"><true><p class="text-muted" style="margin-bottom: 8px;">{{ @T.maintainer }}: <b>{{
+                                                @device->getDeveloper() }}</b></p></true></check>
                                             <p class="text-muted" style="margin-bottom: 8px;">{{ @T.romSize }}: <b>{{
                                                 round(@device->getFilesize() / 1024 / 1024, 1) }} MB</b></p>
                                             <p class="text-muted" style="margin-bottom: 8px;">{{ @T.buildDate }}:

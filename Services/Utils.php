@@ -295,7 +295,7 @@ class Utils {
      */
     private function _loadABDeviceConfigFromData($data, $androidVersion) {
         $developer = $androidVersion === Entity\DeviceConfig::ANDROID_VERSION_10
-            ? $this->_f3->get('T.'.self::DEVELOPER_STUB)
+            ? self::DEVELOPER_STUB
             : $this->_tryToGetAndFormatArrayItem($data, 'developer');
 
         $device = new Entity\DeviceConfig(
