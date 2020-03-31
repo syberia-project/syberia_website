@@ -25,7 +25,7 @@ return [
     'administrator' => 'Администратор проекта',
     'designer' => 'Дизайнер',
     'siteDeveloper' => 'Разработчик сайта',
-    'backEndDeveloper' => 'Back-end разработчик',
+    'devops' => 'Devops',
 
     // General page
     'osDescriptionPart1' => 'операционная система основанная на Android Pie',
