@@ -98,6 +98,7 @@
                                                         <a style="margin-top: auto;" class="btn btn-primary"
                                                            data-toggle="modal"
                                                            data-target="#{{@device->getDeviceCodename()}}Changelog"
+                                                           onclick="openChangelogModal('{{@device->getDeviceCodename()}}')"
                                                            href="#">
                                                             {{ @T.changelogButton }}
                                                         </a>
@@ -123,7 +124,15 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <pre>{{ @device->getChangelog() }}</pre>
+                                                            <div id="js_{{@device->getDeviceCodename()}}ChangelogLoader" class="page-loading">
+                                                                <div class="three-balls">
+                                                                    <div class="ball ball1"></div>
+                                                                    <div class="ball ball2"></div>
+                                                                    <div class="ball ball3"></div>
+                                                                </div>
+                                                            </div>
+
+                                                            <pre id="js_{{@device->getDeviceCodename()}}ChangelogBody" class="changelog"></pre>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
@@ -163,3 +172,28 @@
         </div>
     </false>
 </check>
+
+<script>
+    function setDeviceChangelogBody(device, changelog) {
+        document.getElementById("js_" + device + "ChangelogBody").innerHTML = changelog;
+        document.getElementById("js_" + device + "ChangelogLoader").style.display = "none";
+    }
+
+    function openChangelogModal(device) {
+        document.getElementById("js_" + device + "ChangelogBody").innerHTML = '';
+        document.getElementById("js_" + device + "ChangelogLoader").style.display = 'block';
+
+        ajax_get('/OTA/' + device + '/changelog', function(data) {
+            let status = data['status'];
+            if (status === 'error') {
+                let error = data['error'];
+                setDeviceChangelogBody(device, "{{@T.ajaxError}}:\n" + error);
+                return;
+            }
+            let changelog = data['data'];
+            if (changelog !== null) {
+                setDeviceChangelogBody(device, changelog);
+            }
+        });
+    }
+</script>

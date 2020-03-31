@@ -94,8 +94,42 @@ class Utils {
         return '{"Error": "No OTAs for requested device"}';
     }
 
+    public function getOtaChangelog(string $device): string {
+        $deviceConfig = $this->_getLatestDeviceConfig($device);
+        $result = [];
+
+        if ($deviceConfig === null) {
+            $result['status'] = 'error';
+            $result['error'] = 'Unknown device';
+            $result['data'] = null;
+        } else if ($deviceConfig->changelog === null) {
+            $result['status'] = 'error';
+            $result['error'] = 'No changelog available for device';
+            $result['data'] = null;
+        } else {
+            $result['status'] = 'success';
+            $result['data'] = $deviceConfig->changelog;
+            $result['error'] = null;
+        }
+
+        return json_encode($result);
+    }
+
+    private function _getLatestDeviceConfig(string $device): ?Entity\DeviceConfig {
+        $deviceConfigsByBrand = $this->getOfficialDevicesByBrand();
+        foreach ($deviceConfigsByBrand as $brand => $deviceConfigsByModel) {
+            foreach ($deviceConfigsByModel as $model => $deviceConfigs) {
+                /* @var Entity\DeviceConfig[] $deviceConfigs */
+                if (trim($deviceConfigs[0]->device_codename) === trim($device)) {
+                    return $deviceConfigs[0];
+                }
+            }
+        }
+        return null;
+    }
+
     /**
-     * @return array [string $brand => Entity\DeviceConfig[][] $devices]
+     * @return array [string $brand => [string $model => Entity\DeviceConfig[][]]]
      */
     public function getOfficialDevicesByBrand() {
         $officialDeviceConfigsByModelName = $this->_sortOfficialDeviceConfigsByBuildDelta($this->getOfficialDevicesListByModel());

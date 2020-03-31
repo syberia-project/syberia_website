@@ -65,4 +65,7 @@ return [
     'daysAgo' => 'days ago',
     
     'unknown' => 'unknown',
+    
+    // Front
+    'ajaxError' => 'An error has occurred',
 ];

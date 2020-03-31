@@ -65,4 +65,7 @@ return [
     'daysAgo' => 'дней назад',
 
     'unknown' => 'неизвестен',
+    
+    // Front
+    'ajaxError' => 'Произошла ошибка',
 ];

@@ -55,6 +55,9 @@ $linksAction     = function (Base $f3) {
 $getOtaAction = function (Base $f3, $params) {
     echo utils($f3)->getOtaFileString($params['device']);
 };
+$getOtaChangelogAction = function (Base $f3, $params) {
+    echo utils($f3)->getOtaChangelog($params['device']);
+};
 
 $f3->set  ('ONERROR',        $errorAction);
 $f3->route('GET /',          $indexAction);
@@ -62,6 +65,7 @@ $f3->route('GET /downloads', $downloadsAction);
 $f3->route('GET /team',      $teamAction);
 $f3->route('GET /links',     $linksAction);
 $f3->route('GET /OTA/@device', $getOtaAction);
+$f3->route('GET /OTA/@device/changelog', $getOtaChangelogAction);
 
 $f3->run();
 

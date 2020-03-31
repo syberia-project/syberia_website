@@ -155,3 +155,7 @@
     color: #fff;
     text-decoration-line: underline;
 }
+
+.changelog {
+    min-height: 50px;
+}
