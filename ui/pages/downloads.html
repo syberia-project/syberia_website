@@ -30,7 +30,7 @@
 
                                     <repeat group="{{ @devices }}" key="{{ @index }}" value="{{ @device }}">
 
-                                        <div style="border-bottom: 1px solid rgba(0,0,0,.12);" class="card-body text-left">
+                                        <div <check if="{{ @index === 0 }}"><true>style="border-bottom: 1px solid rgba(0,0,0,.12);"</true></check> class="card-body text-left">
                                             <p class="text-muted" style="margin-bottom: 8px;">{{ @T.brand }}: <b>{{
                                                 @device->getDeviceBrand() }}</b></p>
                                             <p class="text-muted" style="margin-bottom: 8px;">{{ @T.model }}: <b>{{
