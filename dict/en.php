@@ -25,7 +25,7 @@ return [
     'administrator' => 'Project Administrator',
     'designer' => 'Designer',
     'siteDeveloper' => 'Site developer',
-    'devops' => 'Devops',
+    'devOps' => 'DevOps',
 
     // General page
     'osDescriptionPart1' => 'is an Android Pie based operating system',

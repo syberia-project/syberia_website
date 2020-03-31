@@ -104,7 +104,7 @@ class Utils {
         $result = [];
         foreach ($brands as $brand) {
             $devicesByBrand = $this->_filterOfficialDevicesByBrand($officialDeviceConfigsByModelName, $brand);
-            uasort ($devicesByBrand, function($a, $b) {
+            uasort($devicesByBrand, function($a, $b) {
                 /** @var Entity\DeviceConfig[] $a */
                 /** @var Entity\DeviceConfig[] $b */
                 return $a[0]->getLastBuildDelta() > $b[0]->getLastBuildDelta();
@@ -117,7 +117,7 @@ class Utils {
     private function _sortOfficialDeviceConfigsByBuildDelta($officialDeviceConfigsByModelName) {
         $result = [];
         foreach ($officialDeviceConfigsByModelName as $modelName => $officialDeviceConfigs) {
-            uasort ($officialDeviceConfigs, function($a, $b) {
+            usort($officialDeviceConfigs, function($a, $b) {
                 /** @var Entity\DeviceConfig $a */
                 /** @var Entity\DeviceConfig $b */
                 return $a->getLastBuildDelta() > $b->getLastBuildDelta();
