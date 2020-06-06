@@ -196,4 +196,12 @@
             }
         });
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var targetDevice = window.location.hash.substr(1);
+        $(`#${targetDevice}Collapse`).collapse();
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $(`#${targetDevice}Heading`).offset().top - 50
+        }, 1000);
+    }, false);
 </script>
