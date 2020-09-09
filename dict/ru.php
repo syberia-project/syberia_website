@@ -28,8 +28,8 @@ return [
     'devOps' => 'DevOps',
 
     // General page
-    'osDescriptionPart1' => 'операционная система основанная на Android Pie',
-    'osDescriptionPart2' => 'с улучшенной оптимизацией и расширенными настройками',
+    'osDescriptionPart1' => 'проект основанный на AOSP/CAF',
+    'osDescriptionPart2' => 'созданный для улучшения пользовательского опыта Android',
     'performance' => 'Производительность',
     'performanceDescription' => 'Плавность и скорость работы',
     'customisation' => 'Кастомизация',
