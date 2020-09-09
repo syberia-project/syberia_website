@@ -28,8 +28,8 @@ return [
     'devOps' => 'DevOps',
 
     // General page
-    'osDescriptionPart1' => 'is an Android Pie based operating system',
-    'osDescriptionPart2' => 'with some optimization and customization improvements',
+    'osDescriptionPart1' => 'an AOSP/CAF based project',
+    'osDescriptionPart2' => 'built to enhance the stock Android experience',
     'performance' => 'Performance',
     'performanceDescription' => 'Smooth and lag free',
     'customisation' => 'Customisation',
