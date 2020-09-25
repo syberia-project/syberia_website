@@ -152,6 +152,32 @@ class Utils {
         return $result;
     }
 
+    public function getLastUpdatedDeviceConfig(array $devicesConfigsByBrand): ?DeviceConfig {
+        $lastUpdatedDeviceConfig = null;
+
+        foreach ($devicesConfigsByBrand as $brand => $devicesConfigsByModel) {
+            foreach ($devicesConfigsByModel as $model => $deviceConfigs) {
+                foreach ($deviceConfigs as $deviceConfig) {
+                    /** @var DeviceConfig $deviceConfig */
+                    if ($lastUpdatedDeviceConfig === null) {
+                        $lastUpdatedDeviceConfig = $deviceConfig;
+                        continue;
+                    }
+
+                    if ($lastUpdatedDeviceConfig->getLastBuildDelta() > $deviceConfig->getLastBuildDelta()) {
+                        $lastUpdatedDeviceConfig = $deviceConfig;
+                    }
+                }
+            }
+        }
+
+        if ($lastUpdatedDeviceConfig->getLastBuildDelta() > 1) {
+            return null;
+        }
+
+        return $lastUpdatedDeviceConfig;
+    }
+
     private function _sortOfficialDeviceConfigsByBuildDelta($officialDeviceConfigsByModelName) {
         $result = [];
         foreach ($officialDeviceConfigsByModelName as $modelName => $officialDeviceConfigs) {

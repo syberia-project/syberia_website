@@ -43,6 +43,7 @@ return [
     'temporaryUnavailableError' => 'Temporary unavailable',
     'temporaryUnavailableDescription' => 'Technical work in progress, please check back later.',
     'temporaryUnavailableHelp' => 'Also, you can use our <a target="_blank" href="https://sourceforge.net/projects/syberiaos/files/">SourceForge</a><br>for download ROM now.',
+    'recentlyUpdated' => 'Recently updated',
 
     'brand' => 'Brand',
     'model' => 'Model',

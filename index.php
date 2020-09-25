@@ -45,6 +45,7 @@ $downloadsAction = function (Base $f3) {
     $isDownloadPortalEnabled = count($officialDevices) > 0;
     $f3->set('isDownloadPortalEnabled', $isDownloadPortalEnabled);
     !$isDownloadPortalEnabled ?: $f3->set('officialDevices', $officialDevices);
+    $f3->set('lastUpdatedDevice', utils($f3)->getLastUpdatedDeviceConfig($officialDevices));
     utils($f3)->renderPage('Downloads - Syberia OS', 'pages/downloads.html');
 };
 $teamAction      = function (Base $f3) {

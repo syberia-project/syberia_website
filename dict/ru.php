@@ -43,6 +43,7 @@ return [
     'temporaryUnavailableError' => 'Временно недоступно',
     'temporaryUnavailableDescription' => 'Проводятся технические работы, пожалуйста, зайдите позже.',
     'temporaryUnavailableHelp' => 'Так же, вы можете посетить наш <a target="_blank" href="https://sourceforge.net/projects/syberiaos/files/">SourceForge</a><br>для скачивания прошивки.',
+    'recentlyUpdated' => 'Недавно обновлено',
 
     'brand' => 'Производитель',
     'model' => 'Модель',

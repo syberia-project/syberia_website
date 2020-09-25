@@ -5,6 +5,84 @@
         <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
             <div class="mx-auto" style="max-width: 700px;">
 
+                <check if="{{ @lastUpdatedDevice !== null }}">
+                    <div class="alert alert-primary text-left mb-5" role="alert">
+                        <h5 class="alert-heading mb-3">{{ @T.recentlyUpdated }}: <b>{{ str_replace(' ', '&nbsp;', @lastUpdatedDevice->getDeviceModel()) }}</b>&nbsp;<span class="text-muted">({{@lastUpdatedDevice->getDeviceCodename()}})</span></h5>
+
+                        <p style="margin-bottom: 8px;">{{ @T.buildDate }}:
+                            <b>{{ @lastUpdatedDevice->getBuildDate() }}
+                                <check if="{{ @lastUpdatedDevice->getVersion() !== null }}">
+                                    <true> ({{ @lastUpdatedDevice->getVersion() }})</true>
+                                </check>
+                            </b>
+                        </p>
+
+                        <p style="margin-bottom: 8px;">{{ @T.romSize }}: <b>{{
+                            round(@lastUpdatedDevice->getFilesize() / 1024 / 1024, 1) }} MB</b></p>
+
+                        <p style="margin-bottom: 8px;">{{ @T.androidVersion }}:
+                            <b>{{ @lastUpdatedDevice->getAndroidVersion() }}</b>
+                        </p>
+
+                        <hr>
+
+                        <div class="text-center">
+                            <a onclick="handleOutboundLinkClicks('{{ @lastUpdatedDevice->getUrl() }}', 'Download', '{{ @lastUpdatedDevice->getDeviceModel() }} ({{ @lastUpdatedDevice->getDeviceCodename() }})')"
+                               style="margin-top: auto;" href="{{ @lastUpdatedDevice->getUrl() }}"
+                               target="_blank"
+                               class="btn btn-primary">{{ @T.download }}</a>
+
+                            <check if="{{ @lastUpdatedDevice->getChangelog() !== null }}">
+                                <true>
+                                    <a style="margin-top: auto;" class="btn btn-primary"
+                                       data-toggle="modal"
+                                       data-target="#{{@lastUpdatedDevice->getDeviceCodename()}}Changelog"
+                                       onclick="openChangelogModal('{{@lastUpdatedDevice->getDeviceCodename()}}', '{{@lastUpdatedDevice->getAndroidVersion()}}')"
+                                       href="#">
+                                        {{ @T.changelogButton }}
+                                    </a>
+                                </true>
+                            </check>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="{{@lastUpdatedDevice->getDeviceCodename()}}Changelog"
+                             tabindex="-1"
+                             role="dialog"
+                             aria-labelledby="{{@lastUpdatedDevice->getDeviceCodename()}}ModalTitle"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"
+                                            id="{{@lastUpdatedDevice->getDeviceCodename()}}ModalTitle">{{ @T.changelogTitle, @lastUpdatedDevice->getDeviceModel() | format }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="js_{{@lastUpdatedDevice->getDeviceCodename()}}ChangelogLoader" class="page-loading">
+                                            <div class="three-balls">
+                                                <div class="ball ball1"></div>
+                                                <div class="ball ball2"></div>
+                                                <div class="ball ball3"></div>
+                                            </div>
+                                        </div>
+
+                                        <pre id="js_{{@lastUpdatedDevice->getDeviceCodename()}}ChangelogBody" class="changelog"></pre>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">{{ @T.close }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </check>
+
                 <repeat group="{{ @officialDevices }}" key="{{ @brand }}" value="{{ @devicesByModel }}">
                     <h1 class="display-4 font-weight-normal mb-4">{{ @brand }}</h1>
 
