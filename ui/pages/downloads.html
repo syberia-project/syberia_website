@@ -30,7 +30,7 @@
 
                                     <repeat group="{{ @devices }}" key="{{ @index }}" value="{{ @device }}">
 
-                                        <div <check if="{{ @index === 0 }}"><true>style="border-bottom: 1px solid rgba(0,0,0,.12);"</true></check> class="card-body text-left">
+                                        <div <check if="{{ @index !== count(@devices)-1 }}"><true>style="border-bottom: 1px solid rgba(0,0,0,.12);"</true></check> class="card-body text-left">
                                             <p class="text-muted" style="margin-bottom: 8px;">{{ @T.brand }}: <b>{{
                                                 @device->getDeviceBrand() }}</b></p>
                                             <p class="text-muted" style="margin-bottom: 8px;">{{ @T.model }}: <b>{{
@@ -98,7 +98,7 @@
                                                         <a style="margin-top: auto;" class="btn btn-primary"
                                                            data-toggle="modal"
                                                            data-target="#{{@device->getDeviceCodename()}}Changelog"
-                                                           onclick="openChangelogModal('{{@device->getDeviceCodename()}}')"
+                                                           onclick="openChangelogModal('{{@device->getDeviceCodename()}}', '{{@device->getAndroidVersion()}}')"
                                                            href="#">
                                                             {{ @T.changelogButton }}
                                                         </a>
@@ -179,11 +179,11 @@
         document.getElementById("js_" + device + "ChangelogLoader").style.display = "none";
     }
 
-    function openChangelogModal(device) {
+    function openChangelogModal(device, androidVersion) {
         document.getElementById("js_" + device + "ChangelogBody").innerHTML = '';
         document.getElementById("js_" + device + "ChangelogLoader").style.display = 'block';
 
-        ajax_get('/OTA/' + device + '/changelog', function(data) {
+        ajax_get('/OTA/' + device + '/changelog?android=' + androidVersion, function(data) {
             let status = data['status'];
             if (status === 'error') {
                 let error = data['error'];

@@ -30,8 +30,8 @@ class Utils {
     public function __construct(Base $_f3) {
         $this->_f3       = $_f3;
         $this->_template = Template::instance();
-        $this->_log      = new Log('./messages.log');
-        $this->_errorLog = new Log('./errors.log');
+        $this->_log      = new Log('messages.log');
+        $this->_errorLog = new Log('errors.log');
     }
 
     /**
@@ -94,8 +94,8 @@ class Utils {
         return '{"Error": "No OTAs for requested device"}';
     }
 
-    public function getOtaChangelog(string $device): string {
-        $deviceConfig = $this->_getLatestDeviceConfig($device);
+    public function getOtaChangelog(string $device, string $androidVersion): string {
+        $deviceConfig = $this->_getDeviceConfig($device, $androidVersion);
         $result = [];
 
         if ($deviceConfig === null) {
@@ -115,13 +115,17 @@ class Utils {
         return json_encode($result);
     }
 
-    private function _getLatestDeviceConfig(string $device): ?Entity\DeviceConfig {
+    private function _getDeviceConfig(string $device, string $androidVersion): ?Entity\DeviceConfig {
         $deviceConfigsByBrand = $this->getOfficialDevicesByBrand();
         foreach ($deviceConfigsByBrand as $brand => $deviceConfigsByModel) {
             foreach ($deviceConfigsByModel as $model => $deviceConfigs) {
                 /* @var Entity\DeviceConfig[] $deviceConfigs */
-                if (trim($deviceConfigs[0]->device_codename) === trim($device)) {
-                    return $deviceConfigs[0];
+                if (trim($deviceConfigs[0]->getDeviceCodename()) === trim($device)) {
+                    foreach ($deviceConfigs as $deviceConfig) {
+                        if (trim($deviceConfig->getAndroidVersion()) === trim($androidVersion)) {
+                            return $deviceConfig;
+                        }
+                    }
                 }
             }
         }
@@ -170,7 +174,8 @@ class Utils {
         $aonlyConfigs = $this->_processDeviceConfigFiles($officialAOnlyDevicesConfigs, false);
         $abConfigs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true);
         $android10Configs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true, DeviceConfig::ANDROID_VERSION_10);
-        return array_merge_recursive($aonlyConfigs, $abConfigs, $android10Configs);
+        $android11Configs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true, DeviceConfig::ANDROID_VERSION_11);
+        return array_merge_recursive($aonlyConfigs, $abConfigs, $android10Configs, $android11Configs);
     }
 
     /**
@@ -208,11 +213,14 @@ class Utils {
      */
     private function _isAndroidVersionMatch($filename, $targetAndroidVersion) {
         $android10Postfix = '-10.json';
+        $android11Postfix = '-11.json';
         switch ($targetAndroidVersion) {
             case Entity\DeviceConfig::ANDROID_VERSION_9:
-                return !$this->_hasPostfix($filename, $android10Postfix);
+                return !$this->_hasPostfix($filename, $android10Postfix) && !$this->_hasPostfix($filename, $android11Postfix);
             case Entity\DeviceConfig::ANDROID_VERSION_10:
                 return $this->_hasPostfix($filename, $android10Postfix);
+            case Entity\DeviceConfig::ANDROID_VERSION_11:
+                return $this->_hasPostfix($filename, $android11Postfix);
             default:
                 throw new \Exception("Unknown android version: {$targetAndroidVersion}");
         }
@@ -328,7 +336,7 @@ class Utils {
      * @throws \Exception
      */
     private function _loadABDeviceConfigFromData($data, $androidVersion) {
-        $developer = $androidVersion === Entity\DeviceConfig::ANDROID_VERSION_10
+        $developer = $androidVersion === Entity\DeviceConfig::ANDROID_VERSION_10 || $androidVersion === Entity\DeviceConfig::ANDROID_VERSION_11
             ? self::DEVELOPER_STUB
             : $this->_tryToGetAndFormatArrayItem($data, 'developer');
 

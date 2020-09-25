@@ -57,7 +57,7 @@ $getOtaAction = function (Base $f3, $params) {
     echo utils($f3)->getOtaFileString($params['device']);
 };
 $getOtaChangelogAction = function (Base $f3, $params) {
-    echo utils($f3)->getOtaChangelog($params['device']);
+    echo utils($f3)->getOtaChangelog($params['device'], $f3->get('GET.android') ?? Services\Entity\DeviceConfig::ANDROID_VERSION_11);
 };
 
 $f3->set  ('ONERROR',        $errorAction);
