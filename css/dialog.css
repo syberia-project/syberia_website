@@ -1,0 +1,22 @@
+.modal-backdrop.show, .modal-backdrop {
+  background: transparent;
+}
+
+.fade {
+  transition-duration: 0s;
+}
+
+.modal-content {
+  background-color: rgba(255, 255, 255, .6);
+  -webkit-backdrop-filter: saturate(180%) blur(50px);
+  backdrop-filter: saturate(180%) blur(50px);
+  box-shadow: 0 22px 70px 4px rgba(0, 0, 0, 0.56);
+}
+
+.modal-header {
+  border-bottom: 1px solid dimgray;
+}
+
+.modal-footer {
+  border-top: 1px solid dimgray;
+}
