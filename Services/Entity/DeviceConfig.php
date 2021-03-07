@@ -322,6 +322,6 @@ class DeviceConfig {
      * @return bool
      */
     public function isFinal() {
-        return $this->getAndroidVersion() === self::ANDROID_VERSION_9;
+        return $this->getAndroidVersion() === self::ANDROID_VERSION_9 || $this->getAndroidVersion() === self::ANDROID_VERSION_10;
     }
 }

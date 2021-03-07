@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>{{@page_title}}</title>
-    <meta name="description" content="">
+    <meta name="description" content="Syberia OS - {{ @T.osDescriptionPart1 }} {{ @T.osDescriptionPart2 }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="manifest" href="/site.webmanifest">
@@ -16,10 +16,11 @@
     <link rel="stylesheet" href="/css/normalize.css?v={{@STATIC_VER}}">
     <link rel="stylesheet" href="/css/main.css?v={{@STATIC_VER}}">
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700%7CMaterial+Icons">
-    <link rel="stylesheet"
-          href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
-          integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/vendor/mdb.min.css?v={{@STATIC_VER}}">
 
     <link rel="stylesheet" href="/css/styles.css?v={{@STATIC_VER}}">
     <link rel="stylesheet" href="/css/loader.css?v={{@STATIC_VER}}">
@@ -61,7 +62,7 @@
                 <path fill-rule="evenodd"
                       d="M239.000,478.000 C107.004,478.000 -0.000,370.996 -0.000,239.000 C-0.000,107.004 107.004,-0.000 239.000,-0.000 C370.996,-0.000 478.000,107.004 478.000,239.000 C478.000,370.996 370.996,478.000 239.000,478.000 ZM271.013,274.705 C274.072,271.648 274.908,269.811 278.000,267.000 C283.541,261.963 288.052,262.056 293.000,267.000 C305.683,279.673 335.592,310.495 340.040,314.940 C345.587,320.482 356.599,308.245 351.669,303.318 C347.620,299.272 307.549,259.232 293.350,245.044 C291.578,243.274 279.963,243.321 277.601,245.680 C271.892,251.385 262.735,259.735 259.384,263.083 C254.248,268.215 265.260,280.453 271.013,274.705 ZM262.441,145.000 C262.441,145.000 178.577,233.441 156.000,256.000 C150.782,261.214 146.970,261.281 141.770,256.085 C138.107,252.425 132.894,247.930 128.917,243.955 C126.151,241.192 117.255,241.217 114.592,243.878 C96.916,261.540 51.079,307.342 45.292,313.124 C38.102,320.309 54.522,337.472 62.000,330.000 C67.867,324.138 99.356,293.632 115.000,278.000 C119.167,273.836 124.910,273.913 129.000,278.000 C133.179,282.176 138.413,287.416 142.000,291.000 C144.449,293.447 153.627,293.371 156.000,291.000 C178.434,268.583 262.000,181.000 262.000,181.000 C262.000,181.000 399.372,315.378 408.000,324.000 C416.628,332.622 433.573,315.998 424.944,307.377 C416.316,298.755 262.441,145.000 262.441,145.000 Z"></path>
             </svg>
-            <small style="margin-bottom: .5rem!important;" class="d-block mb-3 text-muted">&copy; 2018 - 2020</small>
+            <small style="margin-bottom: .5rem!important;" class="d-block mb-3 text-muted">&copy; 2018 - 2021</small>
 
             <script>
                 function setLangCookie(value) {
@@ -78,15 +79,15 @@
                 }
             </script>
 
-            <div class="container" style="width: max-content; margin-left: 0px;">
+            <div style="width: max-content; margin-left: 0px;">
                 <div class="row"><a href="mailto:info@syberiaos.com" target="_blank">
                     <small class="d-block mb-2 text-muted">info@syberiaos.com</small>
                 </a></div>
                 <div class="row">
                     <p class="mb-2" style="width: 100%; text-align: center;">
-                        <button type="button" onclick="setLangCookie('en')" class="btn btn-sm{{ @currentLanguage==='en' ? ' active' : '' }}"><code>ENG</code></button>
+                        <button type="button" onclick="setLangCookie('en')" class="btn btn-link btn-sm {{ @currentLanguage==='en' ? 'active' : 'text-muted' }}" data-mdb-ripple-color="dark"><i class="flag flag-united-states"></i>EN</button>
                         |
-                        <button type="button" onclick="setLangCookie('ru')" class="btn btn-sm{{ @currentLanguage==='ru' ? ' active' : '' }}"><code>RUS</code></button>
+                        <button type="button" onclick="setLangCookie('ru')" class="btn btn-link btn-sm {{ @currentLanguage==='ru' ? 'active' : 'text-muted' }}" data-mdb-ripple-color="dark"><i class="flag flag-russia"></i>RU</button>
                     </p>
                 </div>
             </div>
@@ -120,19 +121,8 @@
     </div>
 </footer>
 
-<script src="/js/vendor/modernizr-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"
-        integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U"
-        crossorigin="anonymous"></script>
-<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
-        integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
-        crossorigin="anonymous"></script>
-<script>$(document).ready(function () {
-    $('body').bootstrapMaterialDesign();
-});</script>
-<script>window.jQuery || document.write('<script src="/js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+<script src="/js/vendor/modernizr-3.6.0.min.js?v={{@STATIC_VER}}"></script>
+<script src="/js/vendor/mdb.min.js?v={{@STATIC_VER}}"></script>
 <script src="/js/plugins.js?v={{@STATIC_VER}}"></script>
 <script src="/js/main.js?v={{@STATIC_VER}}"></script>
 

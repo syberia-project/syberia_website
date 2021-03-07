@@ -8,7 +8,7 @@ include_once 'config.php';
 
 /** @var Base $f3 */
 $f3->set('DEBUG',      0);
-$f3->set('STATIC_VER', 1);
+$f3->set('STATIC_VER', 2);
 $f3->set('site_url',   SITE_URL);
 $f3->set('utils',      new Services\Utils($f3));
 $f3->set('FALLBACK',   'en');  // English as default fallback language
