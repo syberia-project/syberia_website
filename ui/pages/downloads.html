@@ -276,7 +276,11 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         var targetDevice = window.location.hash.substr(1);
-        $(`#${targetDevice}Collapse`).collapse();
+        if (targetDevice == "") {
+            return;
+        }
+
+        $(`#${targetDevice}Heading > .accordion-button`).click()
         $([document.documentElement, document.body]).animate({
             scrollTop: $(`#${targetDevice}Heading`).offset().top - 50
         }, 1000);
