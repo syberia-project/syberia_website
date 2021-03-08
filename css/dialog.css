@@ -7,10 +7,17 @@
 }
 
 .modal-content {
-  background-color: rgba(255, 255, 255, .6);
-  -webkit-backdrop-filter: saturate(180%) blur(50px);
-  backdrop-filter: saturate(180%) blur(50px);
+  background-color: rgba(255, 255, 255, 1.0);
   box-shadow: 0 22px 70px 4px rgba(0, 0, 0, 0.56);
+}
+
+@supports (backdrop-filter: saturate(180%) blur(50px)) or (-webkit-backdrop-filter: saturate(180%) blur(50px)) {
+  .modal-content {
+    background-color: rgba(255, 255, 255, .6);
+    -webkit-backdrop-filter: saturate(180%) blur(50px);
+    backdrop-filter: saturate(180%) blur(50px);
+    box-shadow: 0 22px 70px 4px rgba(0, 0, 0, 0.56);
+  }
 }
 
 .modal-header {
