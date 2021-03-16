@@ -285,4 +285,13 @@
             scrollTop: $(`#${targetDevice}Heading`).offset().top - 50
         }, 1000);
     }, false);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        $('.accordion').on('shown.bs.collapse', function (e) {
+            const heading = $(e.target).parent().children('.accordion-header');
+            if (!heading.visible()) {
+                $([document.documentElement, document.body]).animate({scrollTop: heading.offset().top - 50}, 100);
+            }
+        });
+    }, false);
 </script>
