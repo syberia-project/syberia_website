@@ -38,6 +38,10 @@ $errorAction     = function (Base $f3) {
     $exception = $f3->get('EXCEPTION');
     if ($exception instanceof \Throwable) {
         \Sentry\captureException($exception);
+    } else {
+		\Sentry\captureException(
+			new \Exception("{$f3->get('ERROR.code')} {$f3->get('ERROR.status')} - {$f3->get('ERROR.text')}", (int)$f3->get('ERROR.code'))
+		);
     }
 
     // recursively clear existing output buffers:
@@ -70,12 +74,12 @@ $getOtaChangelogAction = function (Base $f3, $params) {
     echo utils($f3)->getOtaChangelog($params['device'], $f3->get('GET.android') ?? Services\Entity\DeviceConfig::ANDROID_VERSION_11);
 };
 
-$f3->set  ('ONERROR',        $errorAction);
-$f3->route('GET /',          $indexAction);
-$f3->route('GET /downloads', $downloadsAction);
-$f3->route('GET /team',      $teamAction);
-$f3->route('GET /links',     $linksAction);
-$f3->route('GET /OTA/@device', $getOtaAction);
+$f3->set  ('ONERROR',                    $errorAction);
+$f3->route('GET /',                      $indexAction);
+$f3->route('GET /downloads',             $downloadsAction);
+$f3->route('GET /team',                  $teamAction);
+$f3->route('GET /links',                 $linksAction);
+$f3->route('GET /OTA/@device',           $getOtaAction);
 $f3->route('GET /OTA/@device/changelog', $getOtaChangelogAction);
 
 $f3->run();
