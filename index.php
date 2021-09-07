@@ -35,6 +35,15 @@ $indexAction     = function (Base $f3) {
     utils($f3)->renderPage('Syberia OS', 'pages/index.html');
 };
 $errorAction     = function (Base $f3) {
+    $exception = $f3->get('EXCEPTION');
+    if ($exception instanceof \Throwable) {
+        \Sentry\captureException($exception);
+    }
+
+    // recursively clear existing output buffers:
+    while (ob_get_level())
+        ob_end_clean();
+
     utils($f3)->renderError();
 };
 $downloadsAction = function (Base $f3) {
