@@ -240,13 +240,16 @@ class Utils {
     private function _isAndroidVersionMatch($filename, $targetAndroidVersion) {
         $android10Postfix = '-10.json';
         $android11Postfix = '-11.json';
+        $android12Postfix = '-12.json';
         switch ($targetAndroidVersion) {
             case Entity\DeviceConfig::ANDROID_VERSION_9:
-                return !$this->_hasPostfix($filename, $android10Postfix) && !$this->_hasPostfix($filename, $android11Postfix);
+                return !$this->_hasPostfix($filename, $android10Postfix) && !$this->_hasPostfix($filename, $android11Postfix) && !$this->_hasPostfix($filename, $android12Postfix);;
             case Entity\DeviceConfig::ANDROID_VERSION_10:
                 return $this->_hasPostfix($filename, $android10Postfix);
             case Entity\DeviceConfig::ANDROID_VERSION_11:
                 return $this->_hasPostfix($filename, $android11Postfix);
+            case Entity\DeviceConfig::ANDROID_VERSION_12:
+                return $this->_hasPostfix($filename, $android12Postfix);
             default:
                 throw new \Exception("Unknown android version: {$targetAndroidVersion}");
         }
