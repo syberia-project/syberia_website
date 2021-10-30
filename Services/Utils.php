@@ -201,7 +201,8 @@ class Utils {
         $abConfigs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true);
         $android10Configs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true, DeviceConfig::ANDROID_VERSION_10);
         $android11Configs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true, DeviceConfig::ANDROID_VERSION_11);
-        return array_merge_recursive($aonlyConfigs, $abConfigs, $android10Configs, $android11Configs);
+        $android12Configs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true, DeviceConfig::ANDROID_VERSION_12);
+        return array_merge_recursive($aonlyConfigs, $abConfigs, $android10Configs, $android11Configs, $android12Configs);
     }
 
     /**
