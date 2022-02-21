@@ -15,6 +15,7 @@ return [
     // Links page
     'development' => 'Development',
     'telegramGroups' => 'Telegram groups',
+    'ourDiscord' => 'Discord',
     'communication' => 'Communication',
     'donateLong' => 'Donate',
 

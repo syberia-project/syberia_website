@@ -14,7 +14,8 @@ return [
 
     // Links page
     'development' => 'Разработка',
-    'telegramGroups' => 'Наши группы в Telegram',
+    'telegramGroups' => 'Группы в Telegram',
+    'ourDiscord' => 'Discord',
     'communication' => 'Контакты',
     'donateLong' => 'Поддержать нас',
 
