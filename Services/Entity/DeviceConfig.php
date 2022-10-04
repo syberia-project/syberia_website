@@ -13,6 +13,7 @@ class DeviceConfig {
     const ANDROID_VERSION_10 = '10';
     const ANDROID_VERSION_11 = '11';
     const ANDROID_VERSION_12 = '12';
+    const ANDROID_VERSION_13 = '13';
 
     /**
      * @var string
