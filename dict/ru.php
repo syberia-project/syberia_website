@@ -33,12 +33,14 @@ return [
     'osDescriptionPart2' => 'созданный для улучшения пользовательского опыта Android',
     'performance' => 'Производительность',
     'performanceDescription' => 'Плавность и скорость работы',
-    'customisation' => 'Кастомизация',
+    'customisation' => 'И кастомизация',
     'customisationDescription' => 'Гибкость во всем',
     'updates' => 'Обновления',
     'updatesDescription' => 'Оставайтесь с нами',
     'openSource' => 'Open source',
     'openSourceDescription' => 'Наш <a class="github-link" target="_blank" href="https://github.com/syberia-project">github</a> <br> Наш <a class="github-link" target="_blank" href="http://gerrit.syberiaos.com">gerrit</a>',
+    'trust' => 'Нам доверяют',
+    'sourceforge' => 'Посетите наш <a class="github-link" target="_blank" href="https://sourceforge.net/projects/syberiaos/">SourceForge</a>',
 
     // Download page
     'temporaryUnavailableError' => 'Временно недоступно',

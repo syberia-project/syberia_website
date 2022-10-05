@@ -33,12 +33,14 @@ return [
     'osDescriptionPart2' => 'built to enhance the stock Android experience',
     'performance' => 'Performance',
     'performanceDescription' => 'Smooth and lag free',
-    'customisation' => 'Customisation',
+    'customisation' => 'And customisation',
     'customisationDescription' => 'Flexibility in everything',
     'updates' => 'OTA updates',
     'updatesDescription' => 'Stay tuned',
     'openSource' => 'Open source',
     'openSourceDescription' => 'Our <a class="github-link" target="_blank" href="https://github.com/syberia-project">github</a> <br> Our <a class="github-link" target="_blank" href="http://gerrit.syberiaos.com">gerrit</a>',
+    'trust' => 'We are trusted',
+    'sourceforge' => 'Check our <a class="github-link" target="_blank" href="https://sourceforge.net/projects/syberiaos/">SourceForge</a>',
 
     // Download page
     'temporaryUnavailableError' => 'Temporary unavailable',
