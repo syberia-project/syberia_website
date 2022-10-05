@@ -367,8 +367,8 @@ class Utils {
     }
 
     /**
-     * @param mixed $androidVersion
-     * @param string $data
+     * @param mixed $data
+     * @param int $androidVersion
      * @return Entity\DeviceConfig
      * @throws \Exception
      */
