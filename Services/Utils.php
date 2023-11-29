@@ -203,7 +203,9 @@ class Utils {
         $android11Configs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true, DeviceConfig::ANDROID_VERSION_11);
         $android12Configs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true, DeviceConfig::ANDROID_VERSION_12);
         $android13Configs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true, DeviceConfig::ANDROID_VERSION_13);
-        return array_merge_recursive($aonlyConfigs, $abConfigs, $android10Configs, $android11Configs, $android12Configs, $android13Configs);
+        $android14Configs = $this->_processDeviceConfigFiles($officialABDevicesConfigs, true, DeviceConfig::ANDROID_VERSION_14);
+        return array_merge_recursive($aonlyConfigs, $abConfigs, $android10Configs, 
+                                     $android11Configs, $android12Configs, $android13Configs, $android14Configs);
     }
 
     /**
@@ -244,12 +246,14 @@ class Utils {
         $android11Postfix = '-11.json';
         $android12Postfix = '-12.json';
         $android13Postfix = '-13.json';
+        $android14Postfix = '-14.json';
         switch ($targetAndroidVersion) {
             case Entity\DeviceConfig::ANDROID_VERSION_9:
                 return !$this->_hasPostfix($filename, $android10Postfix)
                         && !$this->_hasPostfix($filename, $android11Postfix)
                         && !$this->_hasPostfix($filename, $android12Postfix)
-                        && !$this->_hasPostfix($filename, $android13Postfix);
+                        && !$this->_hasPostfix($filename, $android13Postfix)
+                        && !$this->_hasPostfix($filename, $android14Postfix);
             case Entity\DeviceConfig::ANDROID_VERSION_10:
                 return $this->_hasPostfix($filename, $android10Postfix);
             case Entity\DeviceConfig::ANDROID_VERSION_11:
@@ -258,6 +262,8 @@ class Utils {
                 return $this->_hasPostfix($filename, $android12Postfix);
             case Entity\DeviceConfig::ANDROID_VERSION_13:
                 return $this->_hasPostfix($filename, $android13Postfix);
+            case Entity\DeviceConfig::ANDROID_VERSION_14:
+                return $this->_hasPostfix($filename, $android14Postfix);
             default:
                 throw new \Exception("Unknown android version: {$targetAndroidVersion}");
         }
